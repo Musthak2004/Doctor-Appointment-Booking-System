@@ -4,14 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DocBook - Book doctor appointments online anytime, anywhere. Find verified healthcare professionals near you.">
+    <meta name="theme-color" content="#0f6bff">
     <title>{% block title %}DocBook - Doctor Appointment Booking{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% block extra_head %}{% endblock %}
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <header class="header">
+    <div class="particle-grid" aria-hidden="true"></div>
+
+    <header class="header" role="banner">
         <div class="header__inner">
             <a href="{% url 'home' %}" class="header__brand" aria-label="DocBook home">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="header__brand-icon"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z"/></svg>
@@ -25,7 +32,7 @@
 
             <nav id="primary-nav" class="header__nav" aria-label="Main navigation">
                 <a href="{% url 'home' %}" class="header__nav-link" {% if request.path == '/' %}aria-current="page"{% endif %}>Home</a>
-                <a href="{% url 'doctors:doctor_list' %}" class="header__nav-link">Find Doctors</a>
+                <a href="{% url 'doctors:doctor_list' %}" class="header__nav-link" {% if request.path == '/doctors/' %}aria-current="page"{% endif %}>Find Doctors</a>
                 <a href="#" class="header__nav-link">About</a>
                 <a href="#" class="header__nav-link">Contact</a>
                 <div class="header__nav-actions">
@@ -53,10 +60,10 @@
                         <button type="submit" class="btn btn--outline">Logout</button>
                     </form>
                     {% if user.doctor_profile %}
-                            <a href="{% url 'doctors:doctor_detail' user.doctor_profile.pk %}" class="btn btn--primary">My Dashboard</a>
-                        {% else %}
-                            <a href="{% url 'patients:patient_detail' %}" class="btn btn--primary">My Dashboard</a>
-                        {% endif %}
+                        <a href="{% url 'doctors:doctor_detail' user.doctor_profile.pk %}" class="btn btn--primary">My Dashboard</a>
+                    {% else %}
+                        <a href="{% url 'patients:patient_detail' %}" class="btn btn--primary">My Dashboard</a>
+                    {% endif %}
                 {% else %}
                     <a href="{% url 'login' %}" class="btn btn--outline">Login</a>
                     <a href="{% url 'signup' %}" class="btn btn--primary">Sign Up</a>
@@ -69,7 +76,7 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="footer__inner">
             <div class="footer__brand-col">
                 <div class="footer__brand">
@@ -112,20 +119,7 @@
         </div>
     </footer>
 
-    <script src="{% static 'js/app.js' %}"></script>
-    <script>
-        (function() {
-            var toggle = document.querySelector('.header__menu-toggle');
-            var nav = document.getElementById('primary-nav');
-            if (toggle && nav) {
-                toggle.addEventListener('click', function() {
-                    var expanded = toggle.getAttribute('aria-expanded') === 'true' ? false : true;
-                    toggle.setAttribute('aria-expanded', expanded);
-                    nav.classList.toggle('header__nav--open');
-                    document.body.classList.toggle('nav-open');
-                });
-            }
-        })();
-    </script>
+    <script src="{% static 'js/app.js' %}" defer></script>
+    {% block extra_scripts %}{% endblock %}
 </body>
 </html>

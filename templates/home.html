@@ -1,43 +1,44 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}DocBook - Home{% endblock %}
+{% block title %}DocBook - Book Doctor Appointments Online{% endblock %}
 
 {% block content %}
 
-<section class="hero">
-    <div class="hero__bg" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="hero__bg-icon"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z"/></svg>
-    </div>
+<section class="hero" aria-label="Hero banner">
+    <canvas id="hero-canvas" class="hero__canvas" aria-hidden="true"></canvas>
     <div class="hero__container">
         <div class="hero__content">
-            <h1 class="hero__title">Book Your Doctor Appointment in Seconds</h1>
+            <div class="hero__badge">
+                <span class="hero__badge-dot" aria-hidden="true"></span>
+                Trusted by 10,000+ patients
+            </div>
+            <h1 class="hero__title">
+                Book Your <span class="hero__title-gradient">Doctor Appointment</span> in Seconds
+            </h1>
             <p class="hero__subtitle">Find the best healthcare professionals near you and book appointments online — anytime, anywhere.</p>
             <div class="hero__actions">
                 <a href="{% url 'doctors:doctor_list' %}" class="btn btn--primary btn--lg">Find a Doctor</a>
-                <a href="#how-it-works" class="btn btn--outline btn--lg btn--light">How It Works</a>
+                <a href="#how-it-works" class="btn btn--light btn--lg">How It Works</a>
             </div>
-        </div>
-    </div>
-</section>
-
-<section class="stats" aria-label="Platform statistics">
-    <div class="stats__container">
-        <div class="stat">
-            <span class="stat__number">500+</span>
-            <span class="stat__label">Doctors</span>
-        </div>
-        <div class="stat">
-            <span class="stat__number">10,000+</span>
-            <span class="stat__label">Appointments</span>
-        </div>
-        <div class="stat">
-            <span class="stat__number">50+</span>
-            <span class="stat__label">Clinics</span>
-        </div>
-        <div class="stat">
-            <span class="stat__number">98%</span>
-            <span class="stat__label">Satisfaction</span>
+            <div class="hero__stats">
+                <div class="hero__stat-item">
+                    <span class="hero__stat-number">500+</span>
+                    <span class="hero__stat-label">Doctors</span>
+                </div>
+                <div class="hero__stat-item">
+                    <span class="hero__stat-number">10,000+</span>
+                    <span class="hero__stat-label">Appointments</span>
+                </div>
+                <div class="hero__stat-item">
+                    <span class="hero__stat-number">50+</span>
+                    <span class="hero__stat-label">Clinics</span>
+                </div>
+                <div class="hero__stat-item">
+                    <span class="hero__stat-number">98%</span>
+                    <span class="hero__stat-label">Satisfaction</span>
+                </div>
+            </div>
         </div>
     </div>
 </section>

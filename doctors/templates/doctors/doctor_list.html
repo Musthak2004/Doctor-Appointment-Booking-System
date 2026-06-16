@@ -9,7 +9,7 @@
     <p class="section__subtitle" style="margin-bottom:0">Browse our network of verified healthcare professionals.</p>
     {% if user.is_authenticated %}
         {% if not user.doctor_profile %}
-            <p style="margin-top:20px">
+            <p style="margin-top:24px">
                 <a href="{% url 'doctors:doctor_create' %}" class="btn btn--outline">Register as a Doctor</a>
             </p>
         {% endif %}
@@ -30,9 +30,9 @@
                 <h3 class="doctor-card__name">
                     {{ doctor.user.get_full_name|default:doctor.user.username }}
                     {% if doctor.is_verified %}
-                        <span class="badge badge--verified" title="Verified">✓</span>
+                        <span class="badge--verified" title="Verified">✓</span>
                     {% else %}
-                        <span class="badge badge--pending" title="Verification pending">Pending</span>
+                        <span class="badge--pending" title="Verification pending">Pending</span>
                     {% endif %}
                 </h3>
                 {% if doctor.specialization %}
@@ -54,14 +54,15 @@
         {% endfor %}
     </div>
 {% else %}
-    <div class="auth" style="min-height:auto;padding:0">
-        <div class="auth__card" style="text-align:center">
-            <div class="auth__icon" aria-hidden="true" style="margin:0 auto 16px">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-            </div>
-            <h2 class="auth__title">No Doctors Available</h2>
-            <p class="auth__subtitle" style="margin-bottom:0">There are no verified doctors listed yet. Please check back later.</p>
+    <div class="empty-state">
+        <div class="empty-state__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         </div>
+        <h2 class="empty-state__title">No Doctors Available</h2>
+        <p class="empty-state__text">There are no doctors listed yet. Please check back later or register as a doctor.</p>
+        {% if user.is_authenticated and not user.doctor_profile %}
+            <a href="{% url 'doctors:doctor_create' %}" class="btn btn--primary">Register as a Doctor</a>
+        {% endif %}
     </div>
 {% endif %}
 {% endblock %}
