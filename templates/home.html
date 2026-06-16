@@ -107,7 +107,11 @@
     <div class="cta__container">
         <h2 id="cta-title" class="cta__title">Ready to Book Your Appointment?</h2>
         <p class="cta__text">Join thousands of patients who trust DocBook for their healthcare needs.</p>
-        <a href="{% url 'signup' %}" class="btn btn--primary btn--lg">Get Started Free</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'patients:patient_detail' %}" class="btn btn--primary btn--lg">My Dashboard</a>
+        {% else %}
+            <a href="{% url 'signup' %}" class="btn btn--primary btn--lg">Get Started Free</a>
+        {% endif %}
     </div>
 </section>
 
