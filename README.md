@@ -28,6 +28,9 @@ A web-based platform built with **Django 6.0** that allows patients to find doct
 - [x] Django admin configuration for user management
 - [x] Responsive base template with navigation and footer
 - [x] Landing page with hero, stats, features, and how-it-works sections
+- [x] Pages app with structured views and URL routing
+- [x] Test suite for accounts (model, form, view tests)
+- [x] Test suite for pages (home page view tests)
 
 ### In Progress / Planned
 - [ ] Doctor search and filtering
