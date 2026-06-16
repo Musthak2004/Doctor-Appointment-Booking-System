@@ -865,6 +865,66 @@ ul {
     justify-content: center;
 }
 
+/* ---- PROFILE FORM ---- */
+
+.form__required {
+    color: #d93025;
+    margin-left: 2px;
+}
+
+.form__group--inline {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form__help {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 6px;
+    line-height: 1.4;
+}
+
+.form__input[type="date"] {
+    min-height: 48px;
+}
+
+textarea.form__input {
+    min-height: 44px;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+@media (max-width: 768px) {
+    .form__group--inline {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---- PROFILE FORM (overrides inside profile body) ---- */
+
+.profile__body .form__group {
+    margin-bottom: 20px;
+}
+
+.profile__body .form__label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.profile__body .form__input {
+    background: #fff;
+    font-size: 0.95rem;
+    min-height: 48px;
+}
+
+.profile__body .form__input:focus {
+    border-color: #1a73e8;
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+}
+
 @media (max-width: 768px) {
     .profile__header {
         padding: 32px 24px 28px;

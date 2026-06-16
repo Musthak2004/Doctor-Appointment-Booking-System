@@ -15,7 +15,7 @@
 
   function initScrollReveal() {
     var els = document.querySelectorAll(
-      '.feature-card, .step, .stat, .section__title, .section__subtitle, .auth__card, .cta__container'
+      '.feature-card, .step, .stat, .section__title, .section__subtitle, .auth__card, .cta__container, .profile__header, .profile__body'
     );
     if (!els.length) return;
 
