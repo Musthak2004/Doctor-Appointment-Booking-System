@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}DocBook - {% if object %}Edit{% else %}Create{% endif %} Patient Profile{% endblock %}
+
+{% block content %}
+<div class="auth">
+    <div class="auth__card">
+        <div class="auth__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <h1 class="auth__title">{% if object %}Edit{% else %}Create{% endif %} Patient Profile</h1>
+        <p class="auth__subtitle">{% if object %}Update your medical information.{% else %}Fill in your details to get started.{% endif %}</p>
+
+        {% if form.non_field_errors %}
+            <div class="form__non-field-errors" role="alert">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            <div class="form__group">
+                <label class="form__label" for="{{ form.date_of_birth.id_for_label }}">Date of Birth</label>
+                <input type="date" name="{{ form.date_of_birth.html_name }}" id="{{ form.date_of_birth.id_for_label }}" class="form__input{% if form.date_of_birth.errors %} form__input--error{% endif %}" value="{{ form.date_of_birth.value|date:'Y-m-d'|default:'' }}">
+                {% for error in form.date_of_birth.errors %}
+                    <p class="form__error" role="alert">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="{{ form.gender.id_for_label }}">Gender</label>
+                <select name="{{ form.gender.html_name }}" id="{{ form.gender.id_for_label }}" class="form__input form__select{% if form.gender.errors %} form__input--error{% endif %}">
+                    <option value="" {% if not form.gender.value %}selected{% endif %}>Select gender</option>
+                    {% for value, label in form.fields.gender.choices %}
+                        <option value="{{ value }}"{% if form.gender.value == value %} selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                {% for error in form.gender.errors %}
+                    <p class="form__error" role="alert">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="{{ form.blood_group.id_for_label }}">Blood Group</label>
+                <input type="text" name="{{ form.blood_group.html_name }}" id="{{ form.blood_group.id_for_label }}" class="form__input{% if form.blood_group.errors %} form__input--error{% endif %}" placeholder="e.g. A+" value="{{ form.blood_group.value|default:'' }}">
+                {% for error in form.blood_group.errors %}
+                    <p class="form__error" role="alert">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="{{ form.emergency_contact.id_for_label }}">Emergency Contact</label>
+                <input type="tel" name="{{ form.emergency_contact.html_name }}" id="{{ form.emergency_contact.id_for_label }}" class="form__input{% if form.emergency_contact.errors %} form__input--error{% endif %}" placeholder="+1 (555) 000-0000" value="{{ form.emergency_contact.value|default:'' }}" autocomplete="tel">
+                {% for error in form.emergency_contact.errors %}
+                    <p class="form__error" role="alert">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="{{ form.address.id_for_label }}">Address</label>
+                <textarea name="{{ form.address.html_name }}" id="{{ form.address.id_for_label }}" class="form__input{% if form.address.errors %} form__input--error{% endif %}" placeholder="Enter your full address" rows="3" style="resize:vertical;min-height:80px">{{ form.address.value|default:'' }}</textarea>
+                {% for error in form.address.errors %}
+                    <p class="form__error" role="alert">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="{{ form.medical_history.id_for_label }}">Medical History</label>
+                <textarea name="{{ form.medical_history.html_name }}" id="{{ form.medical_history.id_for_label }}" class="form__input{% if form.medical_history.errors %} form__input--error{% endif %}" placeholder="List any allergies, chronic conditions, or past surgeries" rows="4" style="resize:vertical;min-height:80px">{{ form.medical_history.value|default:'' }}</textarea>
+                {% for error in form.medical_history.errors %}
+                    <p class="form__error" role="alert">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--submit">{% if object %}Update{% else %}Create{% endif %} Profile</button>
+        </form>
+
+        <p class="auth__footer">
+            <a href="{% url 'patients:patient_detail' %}">Back to profile</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
