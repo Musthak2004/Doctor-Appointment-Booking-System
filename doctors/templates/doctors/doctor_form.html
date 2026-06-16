@@ -87,7 +87,7 @@
                     </div>
                 </div>
 
-                <div class="form__group">
+                <div class="form__group" style="margin-top:16px">
                     <label class="form__label" for="{{ form.bio.id_for_label }}">Bio</label>
                     <textarea name="{{ form.bio.html_name }}" id="{{ form.bio.id_for_label }}" class="form__input{% if form.bio.errors %} form__input--error{% endif %}" placeholder="Tell patients about your background and expertise..." rows="4">{{ form.bio.value|default:'' }}</textarea>
                     <p class="form__help">Share your medical background, areas of expertise, and approach to patient care.</p>
@@ -100,7 +100,7 @@
                     <label class="form__label" for="{{ form.profile_picture.id_for_label }}">Profile Picture</label>
                     <input type="file" name="{{ form.profile_picture.html_name }}" id="{{ form.profile_picture.id_for_label }}" class="form__input{% if form.profile_picture.errors %} form__input--error{% endif %}" accept="image/*">
                     {% if object and object.profile_picture %}
-                        <p class="form__help">Current: <a href="{{ object.profile_picture.url }}" target="_blank">{{ object.profile_picture.name }}</a></p>
+                        <p class="form__help">Current: <a href="{{ object.profile_picture.url }}" target="_blank" style="color:var(--color-primary)">{{ object.profile_picture.name }}</a></p>
                     {% endif %}
                     {% for error in form.profile_picture.errors %}
                         <p class="form__error" role="alert">{{ error }}</p>
