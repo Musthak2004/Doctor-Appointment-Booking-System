@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}DocBook - Log In{% endblock %}
+
+{% block content %}
+<div class="auth">
+    <div class="auth__card">
+        <div class="auth__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        </div>
+        <h1 class="auth__title">Welcome Back</h1>
+        <p class="auth__subtitle">Log in to manage your appointments.</p>
+
+        {% if form.non_field_errors %}
+            <div class="form__non-field-errors" role="alert">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            <div class="form__group">
+                <label class="form__label" for="{{ form.username.id_for_label }}">Email</label>
+                <input type="email" name="{{ form.username.html_name }}" id="{{ form.username.id_for_label }}" class="form__input{% if form.username.errors %} form__input--error{% endif %}" placeholder="you@example.com" value="{{ form.username.value|default:'' }}" required autocomplete="email" inputmode="email">
+                {% for error in form.username.errors %}
+                    <p class="form__error" role="alert">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="{{ form.password.id_for_label }}">Password</label>
+                <input type="password" name="{{ form.password.html_name }}" id="{{ form.password.id_for_label }}" class="form__input{% if form.password.errors %} form__input--error{% endif %}" placeholder="Enter your password" required autocomplete="current-password">
+                {% for error in form.password.errors %}
+                    <p class="form__error" role="alert">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--submit">Log In</button>
+        </form>
+
+        <p class="auth__footer">
+            Don't have an account? <a href="{% url 'signup' %}">Sign up</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

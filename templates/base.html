@@ -9,82 +9,115 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<header class="header">
-    <div class="header__inner">
-        <a href="{% url 'home' %}" class="header__brand">
-            <span class="header__brand-icon">🏥</span>
-            DocBook
-        </a>
+    <header class="header">
+        <div class="header__inner">
+            <a href="{% url 'home' %}" class="header__brand" aria-label="DocBook home">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="header__brand-icon"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z"/></svg>
+                DocBook
+            </a>
 
-        <nav class="header__nav">
-            <a href="{% url 'home' %}" class="header__nav-link">Home</a>
-            <a href="#" class="header__nav-link">Find Doctors</a>
-            <a href="#" class="header__nav-link">About</a>
-            <a href="#" class="header__nav-link">Contact</a>
-        </nav>
+            <button class="header__menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="primary-nav" type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="icon icon--menu"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="icon icon--close"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
 
-        <div class="header__actions">
-            {% if user.is_authenticated %}
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn--outline">Logout</button>
-                </form>
-                <a href="#" class="btn btn--primary">My Dashboard</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="btn btn--outline">Login</a>
-                <a href="{% url 'signup' %}" class="btn btn--primary">Sign Up</a>
-            {% endif %}
-        </div>
-    </div>
-</header>
+            <nav id="primary-nav" class="header__nav" aria-label="Main navigation">
+                <a href="{% url 'home' %}" class="header__nav-link" {% if request.path == '/' %}aria-current="page"{% endif %}>Home</a>
+                <a href="#" class="header__nav-link">Find Doctors</a>
+                <a href="#" class="header__nav-link">About</a>
+                <a href="#" class="header__nav-link">Contact</a>
+                <div class="header__nav-actions">
+                    {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn--outline btn--full">Logout</button>
+                        </form>
+                        <a href="#" class="btn btn--primary btn--full">My Dashboard</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn--outline btn--full">Login</a>
+                        <a href="{% url 'signup' %}" class="btn btn--primary btn--full">Sign Up</a>
+                    {% endif %}
+                </div>
+            </nav>
 
-<main class="main">
-    {% block content %}{% endblock %}
-</main>
-
-<footer class="footer">
-    <div class="footer__inner">
-        <div>
-            <div class="footer__brand">🏥 DocBook</div>
-            <p class="footer__desc">
-                Your trusted platform for booking doctor appointments online.
-                Find the best healthcare professionals and book your slot in seconds.
-            </p>
-        </div>
-
-        <div>
-            <h4 class="footer__heading">Quick Links</h4>
-            <div class="footer__links">
-                <a href="{% url 'home' %}" class="footer__link">Home</a>
-                <a href="#" class="footer__link">Find Doctors</a>
-                <a href="#" class="footer__link">About Us</a>
-                <a href="#" class="footer__link">Contact</a>
+            <div class="header__actions">
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn--outline">Logout</button>
+                    </form>
+                    <a href="#" class="btn btn--primary">My Dashboard</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn--outline">Login</a>
+                    <a href="{% url 'signup' %}" class="btn btn--primary">Sign Up</a>
+                {% endif %}
             </div>
         </div>
+    </header>
 
-        <div>
-            <h4 class="footer__heading">For Patients</h4>
-            <div class="footer__links">
-                <a href="#" class="footer__link">How It Works</a>
-                <a href="#" class="footer__link">Book Appointment</a>
-                <a href="#" class="footer__link">My Appointments</a>
-                <a href="#" class="footer__link">FAQs</a>
+    <main id="main-content" class="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer__inner">
+            <div class="footer__brand-col">
+                <div class="footer__brand">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="footer__brand-icon"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z"/></svg>
+                    DocBook
+                </div>
+                <p class="footer__desc">
+                    Your trusted platform for booking doctor appointments online.
+                </p>
+                <p class="footer__copyright">&copy; {% now "Y" %} DocBook. All rights reserved.</p>
+            </div>
+            <div class="footer__links-col">
+                <div class="footer__link-group">
+                    <h2 class="footer__heading">Quick Links</h2>
+                    <div class="footer__links">
+                        <a href="{% url 'home' %}" class="footer__link">Home</a>
+                        <a href="#" class="footer__link">Find Doctors</a>
+                        <a href="#" class="footer__link">About Us</a>
+                        <a href="#" class="footer__link">Contact</a>
+                    </div>
+                </div>
+                <div class="footer__link-group">
+                    <h2 class="footer__heading">For Patients</h2>
+                    <div class="footer__links">
+                        <a href="#" class="footer__link">How It Works</a>
+                        <a href="#" class="footer__link">Book Appointment</a>
+                        <a href="#" class="footer__link">My Appointments</a>
+                        <a href="#" class="footer__link">FAQs</a>
+                    </div>
+                </div>
+                <div class="footer__link-group">
+                    <h2 class="footer__heading">Contact</h2>
+                    <div class="footer__links">
+                        <span class="footer__link-text">123 Health Street, Medical City</span>
+                        <span class="footer__link-text">+1 (555) 123-4567</span>
+                        <span class="footer__link-text">support@docbook.com</span>
+                    </div>
+                </div>
             </div>
         </div>
+    </footer>
 
-        <div>
-            <h4 class="footer__heading">Contact</h4>
-            <div class="footer__contact-item">📍 123 Health Street, Medical City</div>
-            <div class="footer__contact-item">📞 +1 (555) 123-4567</div>
-            <div class="footer__contact-item">✉️ support@docbook.com</div>
-        </div>
-    </div>
-
-    <div class="footer__bottom">
-        &copy; {% now "Y" %} DocBook. All rights reserved.
-    </div>
-</footer>
-
+    <script src="{% static 'js/app.js' %}"></script>
+    <script>
+        (function() {
+            var toggle = document.querySelector('.header__menu-toggle');
+            var nav = document.getElementById('primary-nav');
+            if (toggle && nav) {
+                toggle.addEventListener('click', function() {
+                    var expanded = toggle.getAttribute('aria-expanded') === 'true' ? false : true;
+                    toggle.setAttribute('aria-expanded', expanded);
+                    nav.classList.toggle('header__nav--open');
+                    document.body.classList.toggle('nav-open');
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
