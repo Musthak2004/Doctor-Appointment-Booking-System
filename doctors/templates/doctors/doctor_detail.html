@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}DocBook - Dr. {{ doctor.user.get_full_name|default:doctor.user.username }}{% endblock %}
+
+{% block content %}
+<div class="profile">
+    <div class="profile__header">
+        <div class="profile__avatar" aria-hidden="true">
+            {% if doctor.profile_picture %}
+                <img src="{{ doctor.profile_picture.url }}" alt="{{ doctor.user.get_full_name|default:doctor.user.username }}" class="profile__img">
+            {% else %}
+                {{ doctor.user.get_full_name|default:doctor.user.username|slice:":1"|upper }}
+            {% endif %}
+        </div>
+        <h1 class="profile__name">Dr. {{ doctor.user.get_full_name|default:doctor.user.username }}</h1>
+        {% if doctor.specialization %}
+            <p class="profile__email">{{ doctor.specialization.name }}</p>
+        {% endif %}
+        {% if doctor.is_verified %}
+            <span class="profile__badge">Verified</span>
+        {% endif %}
+    </div>
+
+    <div class="profile__body">
+        <div class="profile__section">
+            <h2 class="profile__section-title">About</h2>
+            <div class="profile__grid profile__grid--single">
+                <div>
+                    <span class="profile__field-label">Bio</span>
+                    <span class="profile__field-value {% if not doctor.bio %}profile__field-value--empty{% endif %}" style="white-space:pre-wrap">
+                        {{ doctor.bio|default:"No bio provided." }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile__section">
+            <h2 class="profile__section-title">Professional Details</h2>
+            <div class="profile__grid">
+                <div>
+                    <span class="profile__field-label">Specialization</span>
+                    <span class="profile__field-value">{{ doctor.specialization.name|default:"Not specified" }}</span>
+                </div>
+                <div>
+                    <span class="profile__field-label">Experience</span>
+                    <span class="profile__field-value">{{ doctor.experience_years }} years</span>
+                </div>
+                <div>
+                    <span class="profile__field-label">Qualification</span>
+                    <span class="profile__field-value {% if not doctor.qualification %}profile__field-value--empty{% endif %}">
+                        {{ doctor.qualification|default:"Not provided" }}
+                    </span>
+                </div>
+                <div>
+                    <span class="profile__field-label">License Number</span>
+                    <span class="profile__field-value">{{ doctor.license_number }}</span>
+                </div>
+                <div>
+                    <span class="profile__field-label">Hospital / Clinic</span>
+                    <span class="profile__field-value {% if not doctor.hospital_name %}profile__field-value--empty{% endif %}">
+                        {{ doctor.hospital_name|default:"Not provided" }}
+                    </span>
+                </div>
+                <div>
+                    <span class="profile__field-label">Consultation Fee</span>
+                    <span class="profile__field-value">${{ doctor.consultation_fee }}</span>
+                </div>
+            </div>
+        </div>
+
+        {% with availability=doctor.availability.all %}
+            {% if availability %}
+                <div class="profile__section">
+                    <h2 class="profile__section-title">Availability</h2>
+                    <div class="profile__grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">
+                        {% for slot in availability %}
+                            <div>
+                                <span class="profile__field-label">{{ slot.get_day_display }}</span>
+                                <span class="profile__field-value" style="gap:8px;flex-wrap:wrap">
+                                    <span>{{ slot.start_time|time:"g:i A" }} - {{ slot.end_time|time:"g:i A" }}</span>
+                                    {% if not slot.is_available %}
+                                        <span class="profile__tag profile__tag--blood" style="font-size:0.75rem">Unavailable</span>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% with reviews=doctor.reviews.all %}
+            {% if reviews %}
+                <div class="profile__section">
+                    <h2 class="profile__section-title">Patient Reviews</h2>
+                    <div class="profile__grid profile__grid--single" style="display:flex;flex-direction:column;gap:12px">
+                        {% for review in reviews %}
+                            <div style="background:#f8f9fa;border-radius:8px;padding:16px">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                                    <strong style="font-size:0.9rem;color:#1a1a2e">{{ review.patient.get_full_name|default:review.patient.username }}</strong>
+                                    <span style="color:#f59e0b;font-size:0.9rem">
+                                        {% for i in "12345"|make_list %}
+                                            {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+                                        {% endfor %}
+                                    </span>
+                                </div>
+                                <p style="font-size:0.9rem;color:#555;line-height:1.5">{{ review.comment }}</p>
+                                <p style="font-size:0.75rem;color:#999;margin-top:8px">{{ review.created_at|date:"F j, Y" }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="profile__actions">
+            {% if user.doctor_profile == doctor %}
+                <a href="{% url 'doctors:doctor_update' %}" class="btn btn--primary">Edit Profile</a>
+            {% endif %}
+            <a href="{% url 'doctors:doctor_list' %}" class="btn btn--outline">Back to Doctors</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

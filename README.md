@@ -7,8 +7,9 @@ A web-based platform built with **Django 6.0** that allows patients to find doct
 - **User Authentication** — Custom user model with three roles: Patient, Doctor, Admin
 - **Role-based signup** — Register as Patient, Doctor, or Admin
 - **Patient Profiles** — Create and manage personal medical information
-- **Doctor Listings** — Browse verified doctors with specialization, experience, and fees
-- **Doctor Profiles** — Detailed profiles with availability schedules and patient reviews
+- **Doctor Listings** — Browse doctors with specialization, experience, fees, and verification status
+- **Doctor Profiles** — Detailed profiles with availability schedules, patient reviews, and profile pictures
+- **Doctor Registration** — Doctors can register with a dedicated form (specialization, license, bio, profile picture)
 - **Responsive UI** — Modern, mobile-friendly design with custom CSS and vanilla JS
 - **Landing Page** — Hero section, stats counter, feature highlights, and call-to-action
 
@@ -33,8 +34,10 @@ A web-based platform built with **Django 6.0** that allows patients to find doct
 - [x] Landing page with hero, stats, features, and how-it-works sections
 - [x] Pages app with structured views and URL routing
 - [x] Patient profiles — create, update, and view medical info
-- [x] Doctor profiles — specialization, qualifications, fees, availability, reviews
-- [x] Doctor listing page with verified-doctor cards and empty state
+- [x] Doctor profiles — specialization, qualifications, fees, availability, reviews, profile pictures
+- [x] Doctor listing page with doctor cards (profile pic, verification badge, specialty, fee) and empty state
+- [x] Doctor registration and profile editing forms
+- [x] Media file handling for profile picture uploads
 - [x] Navigation linking across all pages (Find Doctors, My Dashboard)
 - [x] Test suites for accounts (17 tests), patients (17 tests), doctors (32 tests), pages (4 tests)
 

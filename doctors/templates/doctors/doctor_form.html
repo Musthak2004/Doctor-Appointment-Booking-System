@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}DocBook - {% if object %}Edit{% else %}Create{% endif %} Doctor Profile{% endblock %}
+
+{% block content %}
+<div class="profile">
+    <div class="profile__header">
+        <div class="profile__avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:36px;height:36px"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <h1 class="profile__name">{% if object %}Edit{% else %}Create{% endif %} Doctor Profile</h1>
+        <p class="profile__email">{% if object %}Update your professional information.{% else %}Register as a doctor and start accepting patients.{% endif %}</p>
+    </div>
+
+    <div class="profile__body">
+        {% if form.non_field_errors %}
+            <div class="form__non-field-errors" role="alert">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+
+            <div class="profile__section">
+                <h2 class="profile__section-title">Professional Information</h2>
+                <div class="form__group--inline">
+                    <div class="form__group">
+                        <label class="form__label" for="{{ form.specialization.id_for_label }}">Specialization <span class="form__required">*</span></label>
+                        <select name="{{ form.specialization.html_name }}" id="{{ form.specialization.id_for_label }}" class="form__input form__select{% if form.specialization.errors %} form__input--error{% endif %}">
+                            <option value="" {% if not form.specialization.value %}selected{% endif %}>Select specialization</option>
+                            {% for value, label in form.fields.specialization.choices %}
+                                <option value="{{ value }}"{% if form.specialization.value|stringformat:"s" == value|stringformat:"s" %} selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        {% for error in form.specialization.errors %}
+                            <p class="form__error" role="alert">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form__group">
+                        <label class="form__label" for="{{ form.license_number.id_for_label }}">License Number <span class="form__required">*</span></label>
+                        <input type="text" name="{{ form.license_number.html_name }}" id="{{ form.license_number.id_for_label }}" class="form__input{% if form.license_number.errors %} form__input--error{% endif %}" placeholder="e.g. MED-12345" value="{{ form.license_number.value|default:'' }}" required>
+                        {% for error in form.license_number.errors %}
+                            <p class="form__error" role="alert">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form__group">
+                        <label class="form__label" for="{{ form.experience_years.id_for_label }}">Years of Experience</label>
+                        <input type="number" name="{{ form.experience_years.html_name }}" id="{{ form.experience_years.id_for_label }}" class="form__input{% if form.experience_years.errors %} form__input--error{% endif %}" placeholder="0" value="{{ form.experience_years.value|default:'0' }}" min="0">
+                        {% for error in form.experience_years.errors %}
+                            <p class="form__error" role="alert">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form__group">
+                        <label class="form__label" for="{{ form.consultation_fee.id_for_label }}">Consultation Fee ($)</label>
+                        <input type="number" name="{{ form.consultation_fee.html_name }}" id="{{ form.consultation_fee.id_for_label }}" class="form__input{% if form.consultation_fee.errors %} form__input--error{% endif %}" placeholder="0.00" value="{{ form.consultation_fee.value|default:'0.00' }}" min="0" step="0.01">
+                        {% for error in form.consultation_fee.errors %}
+                            <p class="form__error" role="alert">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile__section">
+                <h2 class="profile__section-title">Qualifications &amp; Workplace</h2>
+                <div class="form__group--inline">
+                    <div class="form__group">
+                        <label class="form__label" for="{{ form.qualification.id_for_label }}">Qualification</label>
+                        <input type="text" name="{{ form.qualification.html_name }}" id="{{ form.qualification.id_for_label }}" class="form__input{% if form.qualification.errors %} form__input--error{% endif %}" placeholder="e.g. MD, MBBS, Board Certified" value="{{ form.qualification.value|default:'' }}">
+                        {% for error in form.qualification.errors %}
+                            <p class="form__error" role="alert">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form__group">
+                        <label class="form__label" for="{{ form.hospital_name.id_for_label }}">Hospital / Clinic Name</label>
+                        <input type="text" name="{{ form.hospital_name.html_name }}" id="{{ form.hospital_name.id_for_label }}" class="form__input{% if form.hospital_name.errors %} form__input--error{% endif %}" placeholder="e.g. City General Hospital" value="{{ form.hospital_name.value|default:'' }}">
+                        {% for error in form.hospital_name.errors %}
+                            <p class="form__error" role="alert">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="form__group">
+                    <label class="form__label" for="{{ form.bio.id_for_label }}">Bio</label>
+                    <textarea name="{{ form.bio.html_name }}" id="{{ form.bio.id_for_label }}" class="form__input{% if form.bio.errors %} form__input--error{% endif %}" placeholder="Tell patients about your background and expertise..." rows="4">{{ form.bio.value|default:'' }}</textarea>
+                    <p class="form__help">Share your medical background, areas of expertise, and approach to patient care.</p>
+                    {% for error in form.bio.errors %}
+                        <p class="form__error" role="alert">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div class="form__group">
+                    <label class="form__label" for="{{ form.profile_picture.id_for_label }}">Profile Picture</label>
+                    <input type="file" name="{{ form.profile_picture.html_name }}" id="{{ form.profile_picture.id_for_label }}" class="form__input{% if form.profile_picture.errors %} form__input--error{% endif %}" accept="image/*">
+                    {% if object and object.profile_picture %}
+                        <p class="form__help">Current: <a href="{{ object.profile_picture.url }}" target="_blank">{{ object.profile_picture.name }}</a></p>
+                    {% endif %}
+                    {% for error in form.profile_picture.errors %}
+                        <p class="form__error" role="alert">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="profile__actions">
+                <button type="submit" class="btn btn--primary">{% if object %}Update{% else %}Create{% endif %} Profile</button>
+                <a href="{% url 'doctors:doctor_list' %}" class="btn btn--outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

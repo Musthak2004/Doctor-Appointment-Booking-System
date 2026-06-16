@@ -25,7 +25,7 @@
 
             <nav id="primary-nav" class="header__nav" aria-label="Main navigation">
                 <a href="{% url 'home' %}" class="header__nav-link" {% if request.path == '/' %}aria-current="page"{% endif %}>Home</a>
-                <a href="#" class="header__nav-link">Find Doctors</a>
+                <a href="{% url 'doctors:doctor_list' %}" class="header__nav-link">Find Doctors</a>
                 <a href="#" class="header__nav-link">About</a>
                 <a href="#" class="header__nav-link">Contact</a>
                 <div class="header__nav-actions">
@@ -34,7 +34,11 @@
                             {% csrf_token %}
                             <button type="submit" class="btn btn--outline btn--full">Logout</button>
                         </form>
-                        <a href="{% url 'patients:patient_detail' %}" class="btn btn--primary btn--full">My Dashboard</a>
+                        {% if user.doctor_profile %}
+                            <a href="{% url 'doctors:doctor_detail' user.doctor_profile.pk %}" class="btn btn--primary btn--full">My Dashboard</a>
+                        {% else %}
+                            <a href="{% url 'patients:patient_detail' %}" class="btn btn--primary btn--full">My Dashboard</a>
+                        {% endif %}
                     {% else %}
                         <a href="{% url 'login' %}" class="btn btn--outline btn--full">Login</a>
                         <a href="{% url 'signup' %}" class="btn btn--primary btn--full">Sign Up</a>
@@ -48,7 +52,11 @@
                         {% csrf_token %}
                         <button type="submit" class="btn btn--outline">Logout</button>
                     </form>
-                    <a href="{% url 'patients:patient_detail' %}" class="btn btn--primary">My Dashboard</a>
+                    {% if user.doctor_profile %}
+                            <a href="{% url 'doctors:doctor_detail' user.doctor_profile.pk %}" class="btn btn--primary">My Dashboard</a>
+                        {% else %}
+                            <a href="{% url 'patients:patient_detail' %}" class="btn btn--primary">My Dashboard</a>
+                        {% endif %}
                 {% else %}
                     <a href="{% url 'login' %}" class="btn btn--outline">Login</a>
                     <a href="{% url 'signup' %}" class="btn btn--primary">Sign Up</a>
@@ -78,7 +86,7 @@
                     <h2 class="footer__heading">Quick Links</h2>
                     <div class="footer__links">
                         <a href="{% url 'home' %}" class="footer__link">Home</a>
-                        <a href="#" class="footer__link">Find Doctors</a>
+                        <a href="{% url 'doctors:doctor_list' %}" class="footer__link">Find Doctors</a>
                         <a href="#" class="footer__link">About Us</a>
                         <a href="#" class="footer__link">Contact</a>
                     </div>
