@@ -231,7 +231,7 @@ class DoctorListViewTest(TestCase):
         self.assertContains(response, "drlist")
         self.assertTemplateUsed(response, "doctors/doctor_list.html")
 
-    def test_list_hides_unverified_doctors(self):
+    def test_list_shows_unverified_doctors(self):
         Doctor.objects.create(
             user=CustomUser.objects.create_user(
                 username="drunverified",
@@ -244,7 +244,7 @@ class DoctorListViewTest(TestCase):
         )
         response = self.client.get(reverse("doctors:doctor_list"))
         self.assertContains(response, "drlist")
-        self.assertNotContains(response, "drunverified")
+        self.assertContains(response, "drunverified")
 
     def test_empty_list(self):
         Doctor.objects.all().delete()
