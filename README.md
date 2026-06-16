@@ -6,6 +6,9 @@ A web-based platform built with **Django 6.0** that allows patients to find doct
 
 - **User Authentication** — Custom user model with three roles: Patient, Doctor, Admin
 - **Role-based signup** — Register as Patient, Doctor, or Admin
+- **Patient Profiles** — Create and manage personal medical information
+- **Doctor Listings** — Browse verified doctors with specialization, experience, and fees
+- **Doctor Profiles** — Detailed profiles with availability schedules and patient reviews
 - **Responsive UI** — Modern, mobile-friendly design with custom CSS and vanilla JS
 - **Landing Page** — Hero section, stats counter, feature highlights, and call-to-action
 
@@ -20,7 +23,7 @@ A web-based platform built with **Django 6.0** that allows patients to find doct
 
 ## Project Status
 
-**Early development.** The authentication system and landing page are complete. Core booking features (doctor search, appointment scheduling, user dashboard) are not yet implemented.
+**Early development.** Authentication, patient profiles, and doctor listings are built. Booking and appointment scheduling are not yet implemented.
 
 ### What's Built
 - [x] Custom user model (`CustomUser`) with email login and user types
@@ -29,14 +32,15 @@ A web-based platform built with **Django 6.0** that allows patients to find doct
 - [x] Responsive base template with navigation and footer
 - [x] Landing page with hero, stats, features, and how-it-works sections
 - [x] Pages app with structured views and URL routing
-- [x] Test suite for accounts (model, form, view tests)
-- [x] Test suite for pages (home page view tests)
+- [x] Patient profiles — create, update, and view medical info
+- [x] Doctor profiles — specialization, qualifications, fees, availability, reviews
+- [x] Doctor listing page with verified-doctor cards and empty state
+- [x] Navigation linking across all pages (Find Doctors, My Dashboard)
+- [x] Test suites for accounts (17 tests), patients (17 tests), doctors (32 tests), pages (4 tests)
 
 ### In Progress / Planned
-- [ ] Doctor search and filtering
 - [ ] Appointment booking system
-- [ ] User dashboard (patients & doctors)
-- [ ] Doctor profiles and clinic management
+- [ ] User dashboard
 - [ ] About, Contact, FAQ pages
 - [ ] Booking confirmation and notifications
 
