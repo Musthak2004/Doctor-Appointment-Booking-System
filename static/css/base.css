@@ -715,6 +715,174 @@ ul {
     text-decoration: underline;
 }
 
+/* ---- PROFILE PAGE ---- */
+
+.profile {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.profile__header {
+    background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+    border-radius: 16px 16px 0 0;
+    padding: 40px 40px 32px;
+    text-align: center;
+    color: #fff;
+}
+
+.profile__avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    border: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.profile__name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.profile__email {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    margin-bottom: 12px;
+}
+
+.profile__badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.profile__body {
+    background: #fff;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    padding: 32px 40px 40px;
+}
+
+.profile__section {
+    margin-bottom: 28px;
+}
+
+.profile__section:last-child {
+    margin-bottom: 0;
+}
+
+.profile__section-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #1a73e8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e8f0fe;
+}
+
+.profile__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.profile__grid--single {
+    grid-template-columns: 1fr;
+}
+
+.profile__field-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+}
+
+.profile__field-value {
+    font-size: 0.95rem;
+    color: #1a1a2e;
+    font-weight: 500;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    line-height: 1.5;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+}
+
+.profile__field-value--empty {
+    color: #bbb;
+    font-style: italic;
+    font-weight: 400;
+}
+
+.profile__tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.profile__tag--blood {
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+.profile__tag--gender {
+    background: #e8f0fe;
+    color: #1a73e8;
+}
+
+.profile__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid #eef0f2;
+}
+
+.profile__actions .btn {
+    flex: 1;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .profile__header {
+        padding: 32px 24px 28px;
+    }
+
+    .profile__body {
+        padding: 24px;
+    }
+
+    .profile__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile__actions {
+        flex-direction: column;
+    }
+}
+
 /* ---- ANIMATIONS ---- */
 
 .btn__spinner {

@@ -4,61 +4,87 @@
 {% block title %}DocBook - My Profile{% endblock %}
 
 {% block content %}
-<div class="auth">
-    <div class="auth__card">
-        <div class="auth__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+<div class="profile">
+    <div class="profile__header">
+        <div class="profile__avatar" aria-hidden="true">
+            {{ object.user.get_full_name|default:object.user.username|slice:":1"|upper }}
         </div>
-        <h1 class="auth__title">My Profile</h1>
-        <p class="auth__subtitle">{{ object.user.get_full_name|default:object.user.username }}</p>
+        <h1 class="profile__name">{{ object.user.get_full_name|default:object.user.username }}</h1>
+        <p class="profile__email">{{ object.user.email }}</p>
+        {% if object.gender %}
+            <span class="profile__badge">{{ object.get_gender_display }}</span>
+        {% endif %}
+    </div>
 
-        <div style="text-align:left;margin-top:24px">
-            <div class="form__group">
-                <label class="form__label">Email</label>
-                <p style="padding:8px 0;color:#1a1a2e">{{ object.user.email }}</p>
-            </div>
-
-            <div class="form__group">
-                <label class="form__label">Phone</label>
-                <p style="padding:8px 0;color:#1a1a2e">{{ object.user.phone_number|default:"Not provided" }}</p>
-            </div>
-
-            <div class="form__group">
-                <label class="form__label">Date of Birth</label>
-                <p style="padding:8px 0;color:#1a1a2e">{{ object.date_of_birth|date:"F j, Y"|default:"Not provided" }}</p>
-            </div>
-
-            <div class="form__group">
-                <label class="form__label">Gender</label>
-                <p style="padding:8px 0;color:#1a1a2e">{{ object.get_gender_display|default:"Not provided" }}</p>
-            </div>
-
-            <div class="form__group">
-                <label class="form__label">Blood Group</label>
-                <p style="padding:8px 0;color:#1a1a2e">{{ object.blood_group|default:"Not provided" }}</p>
-            </div>
-
-            <div class="form__group">
-                <label class="form__label">Emergency Contact</label>
-                <p style="padding:8px 0;color:#1a1a2e">{{ object.emergency_contact|default:"Not provided" }}</p>
-            </div>
-
-            <div class="form__group">
-                <label class="form__label">Address</label>
-                <p style="padding:8px 0;color:#1a1a2e;white-space:pre-wrap">{{ object.address|default:"Not provided" }}</p>
-            </div>
-
-            <div class="form__group">
-                <label class="form__label">Medical History</label>
-                <p style="padding:8px 0;color:#1a1a2e;white-space:pre-wrap">{{ object.medical_history|default:"No medical history recorded" }}</p>
+    <div class="profile__body">
+        <div class="profile__section">
+            <h2 class="profile__section-title">Contact</h2>
+            <div class="profile__grid">
+                <div>
+                    <span class="profile__field-label">Phone</span>
+                    <span class="profile__field-value {% if not object.user.phone_number %}profile__field-value--empty{% endif %}">
+                        {{ object.user.phone_number|default:"Not provided" }}
+                    </span>
+                </div>
+                <div>
+                    <span class="profile__field-label">Emergency Contact</span>
+                    <span class="profile__field-value {% if not object.emergency_contact %}profile__field-value--empty{% endif %}">
+                        {{ object.emergency_contact|default:"Not provided" }}
+                    </span>
+                </div>
             </div>
         </div>
 
-        <a href="{% url 'patients:patient_update' %}" class="btn btn--primary btn--submit">Edit Profile</a>
+        <div class="profile__section">
+            <h2 class="profile__section-title">Personal Info</h2>
+            <div class="profile__grid">
+                <div>
+                    <span class="profile__field-label">Date of Birth</span>
+                    <span class="profile__field-value {% if not object.date_of_birth %}profile__field-value--empty{% endif %}">
+                        {{ object.date_of_birth|date:"F j, Y"|default:"Not provided" }}
+                    </span>
+                </div>
+                <div>
+                    <span class="profile__field-label">Blood Group</span>
+                    <span class="profile__field-value">
+                        {% if object.blood_group %}
+                            <span class="profile__tag profile__tag--blood">{{ object.blood_group }}</span>
+                        {% else %}
+                            <span class="profile__field-value--empty">Not provided</span>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
 
-        <p class="auth__footer">
-            <a href="{% url 'home' %}">Back to Home</a>
-        </p>
+        <div class="profile__section">
+            <h2 class="profile__section-title">Address</h2>
+            <div class="profile__grid profile__grid--single">
+                <div>
+                    <span class="profile__field-label">Residential Address</span>
+                    <span class="profile__field-value {% if not object.address %}profile__field-value--empty{% endif %}" style="white-space:pre-wrap">
+                        {{ object.address|default:"Not provided" }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile__section">
+            <h2 class="profile__section-title">Medical History</h2>
+            <div class="profile__grid profile__grid--single">
+                <div>
+                    <span class="profile__field-label">Notes &amp; Records</span>
+                    <span class="profile__field-value {% if not object.medical_history %}profile__field-value--empty{% endif %}" style="white-space:pre-wrap">
+                        {{ object.medical_history|default:"No medical history recorded" }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile__actions">
+            <a href="{% url 'patients:patient_update' %}" class="btn btn--primary">Edit Profile</a>
+            <a href="{% url 'home' %}" class="btn btn--outline">Back to Home</a>
+        </div>
     </div>
 </div>
 {% endblock %}
