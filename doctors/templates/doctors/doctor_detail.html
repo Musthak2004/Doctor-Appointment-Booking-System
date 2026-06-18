@@ -115,7 +115,7 @@
         {% endwith %}
 
         <div class="profile__actions">
-            {% if user.doctor_profile == doctor %}
+            {% if user_doctor_profile == doctor %}
                 <a href="{% url 'doctors:doctor_update' %}" class="btn btn--primary">Edit Profile</a>
             {% endif %}
             <a href="{% url 'doctors:doctor_list' %}" class="btn btn--outline">Back to Doctors</a>

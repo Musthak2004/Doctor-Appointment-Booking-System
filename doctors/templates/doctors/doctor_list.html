@@ -8,7 +8,7 @@
     <h1 class="section__title">Find a Doctor</h1>
     <p class="section__subtitle" style="margin-bottom:0">Browse our network of verified healthcare professionals.</p>
     {% if user.is_authenticated %}
-        {% if not user.doctor_profile %}
+        {% if not has_doctor_profile %}
             <p style="margin-top:24px">
                 <a href="{% url 'doctors:doctor_create' %}" class="btn btn--outline">Register as a Doctor</a>
             </p>
@@ -60,7 +60,7 @@
         </div>
         <h2 class="empty-state__title">No Doctors Available</h2>
         <p class="empty-state__text">There are no doctors listed yet. Please check back later or register as a doctor.</p>
-        {% if user.is_authenticated and not user.doctor_profile %}
+        {% if user.is_authenticated and not has_doctor_profile %}
             <a href="{% url 'doctors:doctor_create' %}" class="btn btn--primary">Register as a Doctor</a>
         {% endif %}
     </div>

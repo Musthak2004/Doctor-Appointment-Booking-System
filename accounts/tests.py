@@ -108,15 +108,15 @@ class CustomUserCreationFormTest(TestCase):
 
 class SignUpViewTest(TestCase):
     def test_signup_page_status_code(self):
-        response = self.client.get(reverse("signup"))
+        response = self.client.get(reverse("accounts:signup"))
         self.assertEqual(response.status_code, 200)
 
     def test_signup_page_template(self):
-        response = self.client.get(reverse("signup"))
+        response = self.client.get(reverse("accounts:signup"))
         self.assertTemplateUsed(response, "registration/signup.html")
 
     def test_signup_creates_user(self):
-        response = self.client.post(reverse("signup"), {
+        response = self.client.post(reverse("accounts:signup"), {
             "username": "signupuser",
             "email": "signup@example.com",
             "user_type": "PATIENT",

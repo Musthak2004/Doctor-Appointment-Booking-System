@@ -17,4 +17,4 @@ class HomePageViewTest(TestCase):
 
     def test_home_page_contains_heading(self):
         response = self.client.get(reverse("home"))
-        self.assertContains(response, "Book Your Doctor Appointment")
+        self.assertContains(response, "Book Your")

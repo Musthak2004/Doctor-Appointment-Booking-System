@@ -1,6 +1,6 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
-from.forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm
 
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm

@@ -41,14 +41,14 @@
                             {% csrf_token %}
                             <button type="submit" class="btn btn--outline btn--full">Logout</button>
                         </form>
-                        {% if user.doctor_profile %}
-                            <a href="{% url 'doctors:doctor_detail' user.doctor_profile.pk %}" class="btn btn--primary btn--full">My Dashboard</a>
+                        {% if has_doctor_profile %}
+                            <a href="{% url 'doctors:doctor_detail' user_doctor_profile.pk %}" class="btn btn--primary btn--full">My Dashboard</a>
                         {% else %}
                             <a href="{% url 'patients:patient_detail' %}" class="btn btn--primary btn--full">My Dashboard</a>
                         {% endif %}
                     {% else %}
                         <a href="{% url 'login' %}" class="btn btn--outline btn--full">Login</a>
-                        <a href="{% url 'signup' %}" class="btn btn--primary btn--full">Sign Up</a>
+                        <a href="{% url 'accounts:signup' %}" class="btn btn--primary btn--full">Sign Up</a>
                     {% endif %}
                 </div>
             </nav>
@@ -59,14 +59,14 @@
                         {% csrf_token %}
                         <button type="submit" class="btn btn--outline">Logout</button>
                     </form>
-                    {% if user.doctor_profile %}
-                        <a href="{% url 'doctors:doctor_detail' user.doctor_profile.pk %}" class="btn btn--primary">My Dashboard</a>
+                    {% if has_doctor_profile %}
+                        <a href="{% url 'doctors:doctor_detail' user_doctor_profile.pk %}" class="btn btn--primary">My Dashboard</a>
                     {% else %}
                         <a href="{% url 'patients:patient_detail' %}" class="btn btn--primary">My Dashboard</a>
                     {% endif %}
                 {% else %}
                     <a href="{% url 'login' %}" class="btn btn--outline">Login</a>
-                    <a href="{% url 'signup' %}" class="btn btn--primary">Sign Up</a>
+                    <a href="{% url 'accounts:signup' %}" class="btn btn--primary">Sign Up</a>
                 {% endif %}
             </div>
         </div>

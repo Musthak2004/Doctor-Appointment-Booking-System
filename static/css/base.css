@@ -42,7 +42,7 @@
     --header-height: 70px;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+/* Font loaded via <link> in base.html */
 
 body {
     font-family: var(--font-body);

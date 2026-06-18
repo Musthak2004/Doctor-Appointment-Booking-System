@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 
@@ -40,3 +41,25 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+    @property
+    def has_doctor_profile(self):
+        return hasattr(self, 'doctor_profile')
+
+    @property
+    def has_patient_profile(self):
+        return hasattr(self, 'patient_profile')
+
+    @property
+    def safe_doctor_profile(self):
+        try:
+            return self.doctor_profile
+        except ObjectDoesNotExist:
+            return None
+
+    @property
+    def safe_patient_profile(self):
+        try:
+            return self.patient_profile
+        except ObjectDoesNotExist:
+            return None
