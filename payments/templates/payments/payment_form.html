@@ -10,7 +10,7 @@
       <p class="section__subtitle">Complete your payment to confirm the appointment</p>
     </div>
 
-    <div class="card detail-card">
+    <div class="detail-card">
       <div class="detail-card__body">
         <div class="detail-row">
           <span class="detail-row__label">Doctor</span>
@@ -35,7 +35,7 @@
       {% csrf_token %}
 
       {% if form.non_field_errors %}
-        <div class="form__errors" role="alert">
+        <div class="form__non-field-errors" role="alert">
           {% for error in form.non_field_errors %}
             <p>{{ error }}</p>
           {% endfor %}
@@ -44,21 +44,24 @@
 
       {% for field in form %}
         <div class="form__group">
-          <label for="{{ field.id_for_label }}" class="form__label">{{ field.label }}</label>
+          <label for="{{ field.id_for_label }}" class="form__label">
+            {{ field.label }}
+            {% if field.field.required %}<span class="form__required">*</span>{% endif %}
+          </label>
           {{ field }}
           {% if field.errors %}
-            <ul class="form__field-errors" role="alert">
-              {% for error in field.errors %}
-                <li>{{ error }}</li>
-              {% endfor %}
-            </ul>
+            {% for error in field.errors %}
+              <p class="form__error" role="alert">{{ error }}</p>
+            {% endfor %}
           {% endif %}
         </div>
       {% endfor %}
 
       <div class="form__actions">
-        <a href="{% url 'appointments:appointment_list' %}" class="btn btn--outline">Cancel</a>
-        <button type="submit" class="btn btn--primary">Pay Now</button>
+        <a href="{% url 'appointments:appointment_detail' appointment.id %}" class="btn btn--outline">Cancel</a>
+        <button type="submit" class="btn btn--primary btn--submit" data-loading-text="Processing...">
+          Pay Now
+        </button>
       </div>
     </form>
   </div>

@@ -1535,6 +1535,236 @@ textarea.form__input {
     padding: 0;
 }
 
+/* BADGE */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 14px;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.badge--confirmed {
+    color: #16a34a;
+    background: #f0fdf4;
+}
+
+.badge--completed {
+    color: #0f6bff;
+    background: #e8f0fe;
+}
+
+.badge--cancelled {
+    color: #dc2626;
+    background: #fef2f2;
+}
+
+.badge--rejected {
+    color: #dc2626;
+    background: #fef2f2;
+}
+
+.badge--failed {
+    color: #dc2626;
+    background: #fef2f2;
+}
+
+.badge--refunded {
+    color: #7c3aed;
+    background: #f5f3ff;
+}
+
+/* SECTION ACTIONS */
+.section__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+    justify-content: center;
+}
+
+.section__actions .btn {
+    min-width: 160px;
+    justify-content: center;
+}
+
+/* FORM ACTIONS */
+.form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.form__actions .btn {
+    flex: 1;
+    min-width: 140px;
+    justify-content: center;
+}
+
+/* DETAIL CARD */
+.detail-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+}
+
+.detail-card__body {
+    padding: 28px 32px;
+}
+
+.detail-row {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--color-border);
+    gap: 16px;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row__label {
+    flex: 0 0 140px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding-top: 2px;
+}
+
+.detail-row__value {
+    flex: 1;
+    font-size: 0.95rem;
+    color: var(--color-text);
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+/* LIST CARDS - APPOINTMENTS & PAYMENTS */
+.appointment-list,
+.payment-list {
+    display: grid;
+    gap: 16px;
+}
+
+.appointment-card,
+.payment-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    transition: all var(--transition-base);
+}
+
+.appointment-card:hover,
+.payment-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: transparent;
+}
+
+.appointment-card__body,
+.payment-card__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.appointment-card__doctor,
+.payment-card__title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.appointment-card__specialization {
+    font-size: 0.78rem;
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.appointment-card__meta,
+.payment-card__meta {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.payment-card__amount {
+    font-size: 1.1rem;
+    font-weight: 700;
+    background: var(--color-primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.appointment-card__actions,
+.payment-card__actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* SECTION CONTAINER HELPERS */
+.section__container {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.section__header {
+    margin-bottom: 32px;
+}
+
+/* RESPONSIVE FOR LIST CARDS */
+@media (max-width: 640px) {
+    .appointment-card,
+    .payment-card {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .appointment-card__body,
+    .payment-card__body {
+        align-items: center;
+    }
+
+    .appointment-card__actions,
+    .payment-card__actions {
+        justify-content: center;
+    }
+
+    .detail-card__body {
+        padding: 20px;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        gap: 4px;
+        padding: 10px 0;
+    }
+
+    .detail-row__label {
+        flex: none;
+    }
+}
+
 /* SCROLL REVEAL BASE */
 .reveal {
     opacity: 0;

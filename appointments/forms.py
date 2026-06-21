@@ -39,14 +39,17 @@ class AppointmentForm(forms.ModelForm):
             "reason": "Briefly describe your symptoms or reason for the appointment (optional).",
         }
         widgets = {
+            "doctor": forms.Select(
+                attrs={"class": "form__input form__select"}
+            ),
             "appointment_date": forms.DateInput(
-                attrs={"type": "date"}
+                attrs={"type": "date", "class": "form__input"}
             ),
             "appointment_time": forms.TimeInput(
-                attrs={"type": "time"}
+                attrs={"type": "time", "class": "form__input"}
             ),
             "reason": forms.Textarea(
-                attrs={"rows": 4}
+                attrs={"rows": 4, "class": "form__input"}
             ),
         }
 

@@ -9,7 +9,7 @@
       <h1 class="section__title">Appointment Details</h1>
     </div>
 
-    <div class="card detail-card">
+    <div class="detail-card">
       <div class="detail-card__body">
         <div class="detail-row">
           <span class="detail-row__label">Doctor</span>
@@ -48,8 +48,11 @@
 
     <div class="section__actions">
       <a href="{% url 'appointments:appointment_list' %}" class="btn btn--outline">&larr; Back to Appointments</a>
-      {% if appointment.status == "PENDING" or appointment.status == "CONFIRMED" %}
-        <a href="#" class="btn btn--danger">Cancel Appointment</a>
+      <a href="{% url 'payments:payment_list' %}" class="btn btn--outline">My Payments</a>
+      {% if appointment.payment %}
+        <a href="{% url 'payments:payment_detail' appointment.payment.pk %}" class="btn btn--primary">View Payment</a>
+      {% elif appointment.status == "PENDING" or appointment.status == "CONFIRMED" %}
+        <a href="{% url 'payments:payment_create' appointment.id %}" class="btn btn--primary">Make Payment</a>
       {% endif %}
     </div>
   </div>

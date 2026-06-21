@@ -13,7 +13,7 @@
     {% if appointments %}
       <div class="appointment-list">
         {% for appointment in appointments %}
-          <article class="card appointment-card">
+          <article class="appointment-card">
             <div class="appointment-card__body">
               <h3 class="appointment-card__doctor">
                 Dr. {{ appointment.doctor.user.get_full_name|default:appointment.doctor.user.email }}
@@ -26,16 +26,27 @@
                 at
                 <time datetime="{{ appointment.appointment_time|time:'H:i' }}">{{ appointment.appointment_time|time:"g:i A" }}</time>
               </p>
-              <span class="badge badge--{{ appointment.status|lower }}">{{ appointment.get_status_display }}</span>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <span class="badge badge--{{ appointment.status|lower }}">{{ appointment.get_status_display }}</span>
+                {% if appointment.payment %}
+                  <span class="badge badge--{{ appointment.payment.status|lower }}">{{ appointment.payment.get_status_display }}</span>
+                {% endif %}
+              </div>
             </div>
             <div class="appointment-card__actions">
               <a href="{% url 'appointments:appointment_detail' appointment.id %}" class="btn btn--outline btn--sm">View Details</a>
+              {% if appointment.payment %}
+                <a href="{% url 'payments:payment_detail' appointment.payment.pk %}" class="btn btn--outline btn--sm">Payment</a>
+              {% endif %}
             </div>
           </article>
         {% endfor %}
       </div>
     {% else %}
       <div class="empty-state">
+        <div class="empty-state__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
         <h2 class="empty-state__title">No appointments yet</h2>
         <p class="empty-state__text">You haven't booked any appointments. Find a doctor and schedule your first visit.</p>
         <a href="{% url 'doctors:doctor_list' %}" class="btn btn--primary">Find a Doctor</a>
@@ -44,6 +55,7 @@
 
     <div class="section__actions">
       <a href="{% url 'appointments:appointment_create' %}" class="btn btn--primary">Book New Appointment</a>
+      <a href="{% url 'payments:payment_list' %}" class="btn btn--outline">My Payments</a>
     </div>
   </div>
 </section>

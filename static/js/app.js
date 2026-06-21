@@ -119,7 +119,7 @@
     if (!btn || btn.disabled) return;
     btn.disabled = true;
     btn.dataset.loading = 'true';
-    var text = btn.textContent;
+    var text = btn.getAttribute('data-loading-text') || btn.textContent;
     btn.innerHTML = '<span class="btn__spinner" aria-hidden="true"></span> ' + text;
   }
 

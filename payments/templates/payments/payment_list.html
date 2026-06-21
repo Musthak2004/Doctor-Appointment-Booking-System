@@ -13,7 +13,7 @@
     {% if payments %}
       <div class="payment-list">
         {% for payment in payments %}
-          <article class="card payment-card">
+          <article class="payment-card">
             <div class="payment-card__body">
               <h3 class="payment-card__title">
                 Dr. {{ payment.appointment.doctor.user.get_full_name|default:payment.appointment.doctor.user.email }}
@@ -21,22 +21,32 @@
               <p class="payment-card__meta">
                 {{ payment.appointment.appointment_date|date:"F j, Y" }} at {{ payment.appointment.appointment_time|time:"g:i A" }}
               </p>
-              <p class="payment-card__amount">${{ payment.amount }}</p>
-              <span class="badge badge--{{ payment.status|lower }}">{{ payment.get_status_display }}</span>
+              <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+                <span class="payment-card__amount">${{ payment.amount }}</span>
+                <span class="badge badge--{{ payment.status|lower }}">{{ payment.get_status_display }}</span>
+              </div>
             </div>
             <div class="payment-card__actions">
               <a href="{% url 'payments:payment_detail' payment.id %}" class="btn btn--outline btn--sm">View Details</a>
+              <a href="{% url 'appointments:appointment_detail' payment.appointment.id %}" class="btn btn--outline btn--sm">View Appointment</a>
             </div>
           </article>
         {% endfor %}
       </div>
     {% else %}
       <div class="empty-state">
+        <div class="empty-state__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
         <h2 class="empty-state__title">No payments yet</h2>
         <p class="empty-state__text">You haven't made any payments yet. Book an appointment to get started.</p>
         <a href="{% url 'doctors:doctor_list' %}" class="btn btn--primary">Find a Doctor</a>
       </div>
     {% endif %}
+
+    <div class="section__actions">
+      <a href="{% url 'appointments:appointment_list' %}" class="btn btn--outline">My Appointments</a>
+    </div>
   </div>
 </section>
 {% endblock %}
