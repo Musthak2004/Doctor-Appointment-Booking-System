@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Appointment Details - DocBook{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="section__container">
+    <div class="section__header">
+      <h1 class="section__title">Appointment Details</h1>
+    </div>
+
+    <div class="card detail-card">
+      <div class="detail-card__body">
+        <div class="detail-row">
+          <span class="detail-row__label">Doctor</span>
+          <span class="detail-row__value">Dr. {{ appointment.doctor.user.get_full_name|default:appointment.doctor.user.email }}</span>
+        </div>
+        {% if appointment.doctor.specialization %}
+          <div class="detail-row">
+            <span class="detail-row__label">Specialization</span>
+            <span class="detail-row__value">{{ appointment.doctor.specialization.name }}</span>
+          </div>
+        {% endif %}
+        <div class="detail-row">
+          <span class="detail-row__label">Date</span>
+          <span class="detail-row__value">{{ appointment.appointment_date|date:"F j, Y" }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-row__label">Time</span>
+          <span class="detail-row__value">{{ appointment.appointment_time|time:"g:i A" }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-row__label">Status</span>
+          <span class="badge badge--{{ appointment.status|lower }}">{{ appointment.get_status_display }}</span>
+        </div>
+        {% if appointment.reason %}
+          <div class="detail-row">
+            <span class="detail-row__label">Reason</span>
+            <span class="detail-row__value">{{ appointment.reason }}</span>
+          </div>
+        {% endif %}
+        <div class="detail-row">
+          <span class="detail-row__label">Booked on</span>
+          <span class="detail-row__value">{{ appointment.created_at|date:"F j, Y, g:i A" }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section__actions">
+      <a href="{% url 'appointments:appointment_list' %}" class="btn btn--outline">&larr; Back to Appointments</a>
+      {% if appointment.status == "PENDING" or appointment.status == "CONFIRMED" %}
+        <a href="#" class="btn btn--danger">Cancel Appointment</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

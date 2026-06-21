@@ -102,8 +102,8 @@
                     <h2 class="footer__heading">For Patients</h2>
                     <div class="footer__links">
                         <a href="#" class="footer__link">How It Works</a>
-                        <a href="#" class="footer__link">Book Appointment</a>
-                        <a href="#" class="footer__link">My Appointments</a>
+                        <a href="{% url 'appointments:appointment_create' %}" class="footer__link">Book Appointment</a>
+                        <a href="{% url 'appointments:appointment_list' %}" class="footer__link">My Appointments</a>
                         <a href="#" class="footer__link">FAQs</a>
                     </div>
                 </div>

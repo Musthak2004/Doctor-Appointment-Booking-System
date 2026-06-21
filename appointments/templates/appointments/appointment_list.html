@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}My Appointments - DocBook{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="section__container">
+    <div class="section__header">
+      <h1 class="section__title">My Appointments</h1>
+      <p class="section__subtitle">Manage your upcoming and past appointments</p>
+    </div>
+
+    {% if appointments %}
+      <div class="appointment-list">
+        {% for appointment in appointments %}
+          <article class="card appointment-card">
+            <div class="appointment-card__body">
+              <h3 class="appointment-card__doctor">
+                Dr. {{ appointment.doctor.user.get_full_name|default:appointment.doctor.user.email }}
+              </h3>
+              {% if appointment.doctor.specialization %}
+                <p class="appointment-card__specialization">{{ appointment.doctor.specialization.name }}</p>
+              {% endif %}
+              <p class="appointment-card__meta">
+                <time datetime="{{ appointment.appointment_date|date:'Y-m-d' }}">{{ appointment.appointment_date|date:"F j, Y" }}</time>
+                at
+                <time datetime="{{ appointment.appointment_time|time:'H:i' }}">{{ appointment.appointment_time|time:"g:i A" }}</time>
+              </p>
+              <span class="badge badge--{{ appointment.status|lower }}">{{ appointment.get_status_display }}</span>
+            </div>
+            <div class="appointment-card__actions">
+              <a href="{% url 'appointments:appointment_detail' appointment.id %}" class="btn btn--outline btn--sm">View Details</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <h2 class="empty-state__title">No appointments yet</h2>
+        <p class="empty-state__text">You haven't booked any appointments. Find a doctor and schedule your first visit.</p>
+        <a href="{% url 'doctors:doctor_list' %}" class="btn btn--primary">Find a Doctor</a>
+      </div>
+    {% endif %}
+
+    <div class="section__actions">
+      <a href="{% url 'appointments:appointment_create' %}" class="btn btn--primary">Book New Appointment</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
