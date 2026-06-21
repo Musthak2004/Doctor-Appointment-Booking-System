@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}My Prescriptions - DocBook{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="section__container">
+    <div class="section__header">
+      <h1 class="section__title">My Prescriptions</h1>
+      <p class="section__subtitle">View your prescribed medicines and diagnosis</p>
+    </div>
+
+    {% if prescriptions %}
+      <div class="prescription-list">
+        {% for prescription in prescriptions %}
+          <article class="prescription-card">
+            <div class="prescription-card__body">
+              <h3 class="prescription-card__title">
+                Dr. {{ prescription.appointment.doctor.user.get_full_name|default:prescription.appointment.doctor.user.email }}
+              </h3>
+              <p class="prescription-card__meta">
+                {{ prescription.appointment.appointment_date|date:"F j, Y" }}
+              </p>
+              {% if prescription.diagnosis %}
+                <p class="prescription-card__diagnosis">{{ prescription.diagnosis|truncatewords:20 }}</p>
+              {% endif %}
+              <p class="prescription-card__items">{{ prescription.items.count }} medicine{{ prescription.items.count|pluralize }}</p>
+            </div>
+            <div class="prescription-card__actions">
+              <a href="{% url 'prescriptions:prescription_detail' prescription.id %}" class="btn btn--outline btn--sm">View Details</a>
+              <a href="{% url 'appointments:appointment_detail' prescription.appointment.id %}" class="btn btn--outline btn--sm">View Appointment</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-state__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z"/></svg>
+        </div>
+        <h2 class="empty-state__title">No prescriptions yet</h2>
+        <p class="empty-state__text">You don't have any prescriptions yet. They will appear here after your doctor visits.</p>
+        <a href="{% url 'doctors:doctor_list' %}" class="btn btn--primary">Find a Doctor</a>
+      </div>
+    {% endif %}
+
+    <div class="section__actions">
+      <a href="{% url 'appointments:appointment_list' %}" class="btn btn--outline">My Appointments</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Prescription Details - DocBook{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="section__container">
+    <div class="section__header">
+      <h1 class="section__title">Prescription</h1>
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-card__body">
+        <div class="detail-row">
+          <span class="detail-row__label">Doctor</span>
+          <span class="detail-row__value">Dr. {{ prescription.appointment.doctor.user.get_full_name|default:prescription.appointment.doctor.user.email }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-row__label">Date</span>
+          <span class="detail-row__value">{{ prescription.appointment.appointment_date|date:"F j, Y" }}</span>
+        </div>
+        {% if prescription.diagnosis %}
+          <div class="detail-row">
+            <span class="detail-row__label">Diagnosis</span>
+            <span class="detail-row__value">{{ prescription.diagnosis }}</span>
+          </div>
+        {% endif %}
+        {% if prescription.notes %}
+          <div class="detail-row">
+            <span class="detail-row__label">Notes</span>
+            <span class="detail-row__value">{{ prescription.notes }}</span>
+          </div>
+        {% endif %}
+        <div class="detail-row">
+          <span class="detail-row__label">Created</span>
+          <span class="detail-row__value">{{ prescription.created_at|date:"F j, Y, g:i A" }}</span>
+        </div>
+      </div>
+    </div>
+
+    {% if prescription.items.exists %}
+      <h2 style="font-size:1.1rem;font-weight:700;margin:32px 0 16px">Medicines</h2>
+      {% for item in prescription.items.all %}
+        <div class="detail-card" style="margin-bottom:12px">
+          <div class="detail-card__body">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:8px">{{ item.medicine_name }}</h3>
+            <div class="detail-row">
+              <span class="detail-row__label">Dosage</span>
+              <span class="detail-row__value">{{ item.dosage }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Frequency</span>
+              <span class="detail-row__value">{{ item.frequency }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row__label">Duration</span>
+              <span class="detail-row__value">{{ item.duration }}</span>
+            </div>
+            {% if item.instructions %}
+              <div class="detail-row">
+                <span class="detail-row__label">Instructions</span>
+                <span class="detail-row__value">{{ item.instructions }}</span>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="section__actions">
+      <a href="{% url 'prescriptions:prescription_list' %}" class="btn btn--outline">&larr; Back to Prescriptions</a>
+      <a href="{% url 'appointments:appointment_detail' prescription.appointment.id %}" class="btn btn--outline">View Appointment</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

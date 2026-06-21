@@ -3,10 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Server Error</title>
+    <title>Server Error - DocBook</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+            text-align: center;
+        }
+        .error-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 48px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+        }
+        .error-code {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #dc2626;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+        .error-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .error-text {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            background: #0f6bff;
+            color: #fff;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: #0b5cd9; }
+    </style>
 </head>
 <body>
-    <h1>500 - Server Error</h1>
-    <p>Something went wrong on our end. Please try again later.</p>
+    <div class="error-card">
+        <div class="error-code">500</div>
+        <h1 class="error-title">Server Error</h1>
+        <p class="error-text">Something went wrong on our end. Please try again later. If the problem persists, contact support.</p>
+        <a href="/" class="btn">Go to Home</a>
+    </div>
 </body>
 </html>

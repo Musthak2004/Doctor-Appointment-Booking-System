@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Create Prescription - DocBook{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="section__container">
+    <div class="section__header">
+      <h1 class="section__title">Create Prescription</h1>
+      <p class="section__subtitle">Add diagnosis and prescribed medicines for this appointment</p>
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-card__body">
+        <div class="detail-row">
+          <span class="detail-row__label">Patient</span>
+          <span class="detail-row__value">{{ appointment.patient.get_full_name|default:appointment.patient.email }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-row__label">Date</span>
+          <span class="detail-row__value">{{ appointment.appointment_date|date:"F j, Y" }} at {{ appointment.appointment_time|time:"g:i A" }}</span>
+        </div>
+      </div>
+    </div>
+
+    <form method="post" class="form" novalidate>
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="form__non-field-errors" role="alert">
+          {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% for field in form %}
+        <div class="form__group">
+          <label for="{{ field.id_for_label }}" class="form__label">
+            {{ field.label }}
+            {% if field.field.required %}<span class="form__required">*</span>{% endif %}
+          </label>
+          {{ field }}
+          {% if field.errors %}
+            {% for error in field.errors %}
+              <p class="form__error" role="alert">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
+          {% if field.help_text %}
+            <p class="form__help">{{ field.help_text }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <div class="form__actions">
+        <a href="{% url 'appointments:appointment_detail' appointment.id %}" class="btn btn--outline">Cancel</a>
+        <button type="submit" class="btn btn--primary btn--submit" data-loading-text="Saving...">
+          Save Prescription
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

@@ -1721,6 +1721,66 @@ textarea.form__input {
     flex-shrink: 0;
 }
 
+/* PRESCRIPTION LIST CARDS */
+.prescription-list {
+    display: grid;
+    gap: 16px;
+}
+
+.prescription-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    transition: all var(--transition-base);
+}
+
+.prescription-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: transparent;
+}
+
+.prescription-card__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.prescription-card__title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.prescription-card__meta {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.prescription-card__diagnosis {
+    font-size: 0.85rem;
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+.prescription-card__items {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.prescription-card__actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
 /* SECTION CONTAINER HELPERS */
 .section__container {
     max-width: 720px;
@@ -1734,19 +1794,22 @@ textarea.form__input {
 /* RESPONSIVE FOR LIST CARDS */
 @media (max-width: 640px) {
     .appointment-card,
-    .payment-card {
+    .payment-card,
+    .prescription-card {
         flex-direction: column;
         align-items: stretch;
         text-align: center;
     }
 
     .appointment-card__body,
-    .payment-card__body {
+    .payment-card__body,
+    .prescription-card__body {
         align-items: center;
     }
 
     .appointment-card__actions,
-    .payment-card__actions {
+    .payment-card__actions,
+    .prescription-card__actions {
         justify-content: center;
     }
 

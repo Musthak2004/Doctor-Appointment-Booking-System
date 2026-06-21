@@ -31,6 +31,13 @@ class AppointmentCreateView(
         "appointments:appointment_list"
     )
 
+    def get_initial(self):
+        initial = super().get_initial()
+        doctor_pk = self.request.GET.get("doctor")
+        if doctor_pk:
+            initial["doctor"] = doctor_pk
+        return initial
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user

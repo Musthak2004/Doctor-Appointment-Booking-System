@@ -117,6 +117,8 @@
         <div class="profile__actions">
             {% if user_doctor_profile == doctor %}
                 <a href="{% url 'doctors:doctor_update' %}" class="btn btn--primary">Edit Profile</a>
+            {% else %}
+                <a href="{% url 'appointments:appointment_create' %}?doctor={{ doctor.pk }}" class="btn btn--primary">Book Appointment</a>
             {% endif %}
             <a href="{% url 'doctors:doctor_list' %}" class="btn btn--outline">Back to Doctors</a>
         </div>

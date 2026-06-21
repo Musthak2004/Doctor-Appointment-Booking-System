@@ -33,8 +33,7 @@
             <nav id="primary-nav" class="header__nav" aria-label="Main navigation">
                 <a href="{% url 'home' %}" class="header__nav-link" {% if request.path == '/' %}aria-current="page"{% endif %}>Home</a>
                 <a href="{% url 'doctors:doctor_list' %}" class="header__nav-link" {% if request.path == '/doctors/' %}aria-current="page"{% endif %}>Find Doctors</a>
-                <a href="#" class="header__nav-link">About</a>
-                <a href="#" class="header__nav-link">Contact</a>
+
                 <div class="header__nav-actions">
                     {% if user.is_authenticated %}
                         <form method="post" action="{% url 'logout' %}">
@@ -94,18 +93,16 @@
                     <div class="footer__links">
                         <a href="{% url 'home' %}" class="footer__link">Home</a>
                         <a href="{% url 'doctors:doctor_list' %}" class="footer__link">Find Doctors</a>
-                        <a href="#" class="footer__link">About Us</a>
-                        <a href="#" class="footer__link">Contact</a>
+
                     </div>
                 </div>
                 <div class="footer__link-group">
                     <h2 class="footer__heading">For Patients</h2>
                     <div class="footer__links">
-                        <a href="#" class="footer__link">How It Works</a>
                         <a href="{% url 'appointments:appointment_create' %}" class="footer__link">Book Appointment</a>
                         <a href="{% url 'appointments:appointment_list' %}" class="footer__link">My Appointments</a>
                         <a href="{% url 'payments:payment_list' %}" class="footer__link">My Payments</a>
-                        <a href="#" class="footer__link">FAQs</a>
+                        <a href="{% url 'prescriptions:prescription_list' %}" class="footer__link">My Prescriptions</a>
                     </div>
                 </div>
                 <div class="footer__link-group">

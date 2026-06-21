@@ -48,7 +48,8 @@
 
     <div class="section__actions">
       <a href="{% url 'appointments:appointment_list' %}" class="btn btn--outline">&larr; Back to Appointments</a>
-      <a href="{% url 'payments:payment_list' %}" class="btn btn--outline">My Payments</a>
+      <a href="{% url 'payments:payment_list' %}" class="btn btn--outline">Payments</a>
+      <a href="{% url 'prescriptions:prescription_list' %}" class="btn btn--outline">Prescriptions</a>
       {% if appointment.payment %}
         <a href="{% url 'payments:payment_detail' appointment.payment.pk %}" class="btn btn--primary">View Payment</a>
       {% elif appointment.status == "PENDING" or appointment.status == "CONFIRMED" %}
