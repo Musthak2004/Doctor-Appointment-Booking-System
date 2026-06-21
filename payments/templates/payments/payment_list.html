@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}My Payments - DocBook{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="section__container">
+    <div class="section__header">
+      <h1 class="section__title">My Payments</h1>
+      <p class="section__subtitle">View your payment history</p>
+    </div>
+
+    {% if payments %}
+      <div class="payment-list">
+        {% for payment in payments %}
+          <article class="card payment-card">
+            <div class="payment-card__body">
+              <h3 class="payment-card__title">
+                Dr. {{ payment.appointment.doctor.user.get_full_name|default:payment.appointment.doctor.user.email }}
+              </h3>
+              <p class="payment-card__meta">
+                {{ payment.appointment.appointment_date|date:"F j, Y" }} at {{ payment.appointment.appointment_time|time:"g:i A" }}
+              </p>
+              <p class="payment-card__amount">${{ payment.amount }}</p>
+              <span class="badge badge--{{ payment.status|lower }}">{{ payment.get_status_display }}</span>
+            </div>
+            <div class="payment-card__actions">
+              <a href="{% url 'payments:payment_detail' payment.id %}" class="btn btn--outline btn--sm">View Details</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <h2 class="empty-state__title">No payments yet</h2>
+        <p class="empty-state__text">You haven't made any payments yet. Book an appointment to get started.</p>
+        <a href="{% url 'doctors:doctor_list' %}" class="btn btn--primary">Find a Doctor</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

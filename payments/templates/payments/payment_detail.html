@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Details - DocBook{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="section__container">
+    <div class="section__header">
+      <h1 class="section__title">Payment Details</h1>
+    </div>
+
+    <div class="card detail-card">
+      <div class="detail-card__body">
+        <div class="detail-row">
+          <span class="detail-row__label">Appointment</span>
+          <span class="detail-row__value">
+            Dr. {{ payment.appointment.doctor.user.get_full_name|default:payment.appointment.doctor.user.email }}
+            on {{ payment.appointment.appointment_date|date:"F j, Y" }}
+          </span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-row__label">Amount</span>
+          <span class="detail-row__value">${{ payment.amount }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-row__label">Method</span>
+          <span class="detail-row__value">{{ payment.get_payment_method_display }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-row__label">Status</span>
+          <span class="badge badge--{{ payment.status|lower }}">{{ payment.get_status_display }}</span>
+        </div>
+        {% if payment.transaction_id %}
+          <div class="detail-row">
+            <span class="detail-row__label">Transaction ID</span>
+            <span class="detail-row__value">{{ payment.transaction_id }}</span>
+          </div>
+        {% endif %}
+        {% if payment.paid_at %}
+          <div class="detail-row">
+            <span class="detail-row__label">Paid at</span>
+            <span class="detail-row__value">{{ payment.paid_at|date:"F j, Y, g:i A" }}</span>
+          </div>
+        {% endif %}
+        <div class="detail-row">
+          <span class="detail-row__label">Created</span>
+          <span class="detail-row__value">{{ payment.created_at|date:"F j, Y, g:i A" }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section__actions">
+      <a href="{% url 'payments:payment_list' %}" class="btn btn--outline">&larr; Back to Payments</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
