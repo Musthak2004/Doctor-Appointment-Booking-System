@@ -1,3 +1,4 @@
+from django.db import models
 from django.views.generic import (
     ListView,
     DetailView,
@@ -63,8 +64,40 @@ class AppointmentListView(
         return Appointment.objects.filter(
             patient=self.request.user
         ).select_related(
-            "doctor__user"
+            "doctor__user", "doctor__specialization"
+        ).prefetch_related(
+            "payment"
         )
+
+class DoctorAppointmentListView(
+    LoginRequiredMixin,
+    ListView
+):
+
+    model = Appointment
+
+    template_name = (
+        "appointments/appointment_list.html"
+    )
+
+    context_object_name = (
+        "appointments"
+    )
+
+    def get_queryset(self):
+        return Appointment.objects.filter(
+            doctor__user=self.request.user
+        ).select_related(
+            "patient", "doctor__specialization"
+        ).prefetch_related(
+            "payment"
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_doctor_view"] = True
+        return context
+
 
 class AppointmentDetailView(
     LoginRequiredMixin,
@@ -82,10 +115,12 @@ class AppointmentDetailView(
     )
 
     def get_queryset(self):
-
         return Appointment.objects.filter(
-            patient=self.request.user
+            models.Q(patient=self.request.user) |
+            models.Q(doctor__user=self.request.user)
         ).select_related(
             "doctor__user", "patient"
+        ).prefetch_related(
+            "review", "payment"
         )
 

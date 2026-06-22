@@ -66,9 +66,13 @@ class Doctor(models.Model):
         auto_now_add=True
     )
 
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
     def __str__(self):
         return self.user.username
-    
+
 class DoctorAvailability(models.Model):
 
     DAYS = (
@@ -98,6 +102,10 @@ class DoctorAvailability(models.Model):
 
     is_available = models.BooleanField(
         default=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
     )
 
     def __str__(self):

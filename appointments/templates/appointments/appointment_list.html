@@ -7,7 +7,7 @@
   <div class="section__container">
     <div class="section__header">
       <h1 class="section__title">My Appointments</h1>
-      <p class="section__subtitle">Manage your upcoming and past appointments</p>
+      <p class="section__subtitle">{% if is_doctor_view %}Manage appointments with your patients{% else %}Manage your upcoming and past appointments{% endif %}</p>
     </div>
 
     {% if appointments %}
@@ -16,7 +16,11 @@
           <article class="appointment-card">
             <div class="appointment-card__body">
               <h3 class="appointment-card__doctor">
-                Dr. {{ appointment.doctor.user.get_full_name|default:appointment.doctor.user.email }}
+                {% if is_doctor_view %}
+                  {{ appointment.patient.get_full_name|default:appointment.patient.email }}
+                {% else %}
+                  Dr. {{ appointment.doctor.user.get_full_name|default:appointment.doctor.user.email }}
+                {% endif %}
               </h3>
               {% if appointment.doctor.specialization %}
                 <p class="appointment-card__specialization">{{ appointment.doctor.specialization.name }}</p>
@@ -54,9 +58,13 @@
     {% endif %}
 
     <div class="section__actions">
-      <a href="{% url 'appointments:appointment_create' %}" class="btn btn--primary">Book New Appointment</a>
-      <a href="{% url 'payments:payment_list' %}" class="btn btn--outline">Payments</a>
-      <a href="{% url 'prescriptions:prescription_list' %}" class="btn btn--outline">Prescriptions</a>
+      {% if is_doctor_view %}
+        <a href="{% url 'doctors:doctor_detail' user_doctor_profile.pk %}" class="btn btn--outline">My Profile</a>
+      {% else %}
+        <a href="{% url 'appointments:appointment_create' %}" class="btn btn--primary">Book New Appointment</a>
+        <a href="{% url 'payments:payment_list' %}" class="btn btn--outline">Payments</a>
+        <a href="{% url 'prescriptions:prescription_list' %}" class="btn btn--outline">Prescriptions</a>
+      {% endif %}
     </div>
   </div>
 </section>

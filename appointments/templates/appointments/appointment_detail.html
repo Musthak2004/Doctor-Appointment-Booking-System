@@ -11,6 +11,12 @@
 
     <div class="detail-card">
       <div class="detail-card__body">
+        {% if has_doctor_profile %}
+          <div class="detail-row">
+            <span class="detail-row__label">Patient</span>
+            <span class="detail-row__value">{{ appointment.patient.get_full_name|default:appointment.patient.email }}</span>
+          </div>
+        {% endif %}
         <div class="detail-row">
           <span class="detail-row__label">Doctor</span>
           <span class="detail-row__value">Dr. {{ appointment.doctor.user.get_full_name|default:appointment.doctor.user.email }}</span>
@@ -47,13 +53,23 @@
     </div>
 
     <div class="section__actions">
-      <a href="{% url 'appointments:appointment_list' %}" class="btn btn--outline">&larr; Back to Appointments</a>
+      <a href="{% if has_doctor_profile %}{% url 'appointments:doctor_appointment_list' %}{% else %}{% url 'appointments:appointment_list' %}{% endif %}" class="btn btn--outline">&larr; Back to Appointments</a>
       <a href="{% url 'payments:payment_list' %}" class="btn btn--outline">Payments</a>
       <a href="{% url 'prescriptions:prescription_list' %}" class="btn btn--outline">Prescriptions</a>
+      <a href="{% url 'reviews:review_list' %}" class="btn btn--outline">Reviews</a>
+      {% if appointment.review %}
+        <a href="{% url 'reviews:review_detail' appointment.review.pk %}" class="btn btn--primary">View Review</a>
+      {% elif appointment.status == "COMPLETED" %}
+        <a href="{% url 'reviews:review_create' appointment.id %}" class="btn btn--primary">Write a Review</a>
+      {% endif %}
       {% if appointment.payment %}
         <a href="{% url 'payments:payment_detail' appointment.payment.pk %}" class="btn btn--primary">View Payment</a>
       {% elif appointment.status == "PENDING" or appointment.status == "CONFIRMED" %}
-        <a href="{% url 'payments:payment_create' appointment.id %}" class="btn btn--primary">Make Payment</a>
+        {% if has_doctor_profile %}
+          <a href="{% url 'prescriptions:prescription_create' appointment.id %}" class="btn btn--primary">Create Prescription</a>
+        {% else %}
+          <a href="{% url 'payments:payment_create' appointment.id %}" class="btn btn--primary">Make Payment</a>
+        {% endif %}
       {% endif %}
     </div>
   </div>
