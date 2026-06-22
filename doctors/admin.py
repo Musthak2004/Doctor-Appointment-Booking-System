@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Doctor, Specialization, DoctorAvailability, DoctorReview
+from .models import Doctor, Specialization, DoctorAvailability
 
 
 @admin.register(Specialization)
@@ -51,23 +51,3 @@ class AvailabilityAdmin(admin.ModelAdmin):
 
     list_select_related = ("doctor__user",)
 
-
-@admin.register(DoctorReview)
-class DoctorReviewAdmin(admin.ModelAdmin):
-    list_display = (
-        "doctor",
-        "patient",
-        "rating",
-        "created_at",
-    )
-
-    list_filter = ("rating",)
-
-    list_select_related = ("doctor__user", "patient")
-
-    search_fields = (
-        "doctor__user__username",
-        "patient__username",
-    )
-
-    date_hierarchy = "created_at"

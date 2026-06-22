@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Review Details - DocBook{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="section__container">
+    <div class="section__header">
+      <h1 class="section__title">Review Details</h1>
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-card__body">
+        <div class="detail-row">
+          <span class="detail-row__label">Doctor</span>
+          <span class="detail-row__value">Dr. {{ review.doctor.user.get_full_name|default:review.doctor.user.username }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-row__label">Appointment</span>
+          <span class="detail-row__value">
+            <time datetime="{{ review.appointment.appointment_date|date:'Y-m-d' }}">{{ review.appointment.appointment_date|date:"F j, Y" }}</time>
+            at
+            <time datetime="{{ review.appointment.appointment_time|time:'H:i' }}">{{ review.appointment.appointment_time|time:"g:i A" }}</time>
+          </span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-row__label">Rating</span>
+          <span class="detail-row__value" style="display:flex;align-items:center;gap:8px">
+            <span style="color:var(--color-warning);font-size:1.15rem;letter-spacing:2px" aria-label="{{ review.rating }} out of 5 stars">
+              {% for i in "12345"|make_list %}
+                {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+              {% endfor %}
+            </span>
+            <span style="font-size:0.85rem;color:var(--color-text-muted)">({{ review.rating }}/5)</span>
+          </span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-row__label">Comment</span>
+          <span class="detail-row__value" style="white-space:pre-wrap;line-height:1.7">
+            {% if review.comment %}
+              {{ review.comment }}
+            {% else %}
+              <span class="profile__field-value--empty">No comment provided.</span>
+            {% endif %}
+          </span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-row__label">Submitted</span>
+          <span class="detail-row__value"><time datetime="{{ review.created_at|date:'Y-m-d' }}">{{ review.created_at|date:"F j, Y" }}</time></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section__actions">
+      <a href="{% url 'reviews:review_list' %}" class="btn btn--outline">Back to Reviews</a>
+      <a href="{% url 'appointments:appointment_detail' review.appointment.id %}" class="btn btn--outline">View Appointment</a>
+      <a href="{% url 'doctors:doctor_detail' review.doctor.id %}" class="btn btn--outline">View Doctor</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

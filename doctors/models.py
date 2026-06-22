@@ -1,5 +1,4 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
 from accounts.models import CustomUser
 
 
@@ -107,32 +106,3 @@ class DoctorAvailability(models.Model):
     class Meta:
         unique_together = ("doctor", "day", "start_time")
 
-class DoctorReview(models.Model):
-
-    doctor = models.ForeignKey(
-        Doctor,
-        on_delete=models.CASCADE,
-        related_name="reviews"
-    )
-
-    patient = models.ForeignKey(
-        CustomUser,
-        on_delete=models.CASCADE,
-        related_name="doctor_reviews"
-    )
-
-    rating = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(5)]
-    )
-
-    comment = models.TextField()
-
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
-
-    class Meta:
-        unique_together = ("doctor", "patient")
-
-    def __str__(self):
-        return f"{self.patient.username} -> {self.doctor.user.username}"

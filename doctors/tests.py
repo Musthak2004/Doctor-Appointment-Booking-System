@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
-from .models import Doctor, Specialization, DoctorAvailability, DoctorReview
+from .models import Doctor, Specialization, DoctorAvailability
 from .forms import DoctorForm, AvailabilityForm
 
 CustomUser = get_user_model()
@@ -97,54 +97,6 @@ class DoctorAvailabilityModelTest(TestCase):
 
     def test_availability_str(self):
         self.assertEqual(str(self.slot), "dravail - mon")
-
-
-class DoctorReviewModelTest(TestCase):
-    def setUp(self):
-        self.doctor = Doctor.objects.create(
-            user=CustomUser.objects.create_user(
-                username="drreview", email="review@example.com", password="testpass123"
-            ),
-            license_number="MED-REVIEW",
-            consultation_fee=100.00,
-        )
-        self.patient = CustomUser.objects.create_user(
-            username="patient1", email="patient1@example.com", password="testpass123"
-        )
-        self.review = DoctorReview.objects.create(
-            doctor=self.doctor,
-            patient=self.patient,
-            rating=5,
-            comment="Excellent doctor!",
-        )
-
-    def test_review_creation(self):
-        self.assertEqual(self.review.rating, 5)
-        self.assertEqual(self.review.comment, "Excellent doctor!")
-
-    def test_review_str(self):
-        self.assertEqual(str(self.review), "patient1 -> drreview")
-
-    def test_unique_patient_doctor(self):
-        with self.assertRaises(Exception):
-            DoctorReview.objects.create(
-                doctor=self.doctor,
-                patient=self.patient,
-                rating=3,
-                comment="Another review",
-            )
-
-    def test_rating_validators(self):
-        review = DoctorReview(
-            doctor=self.doctor,
-            patient=CustomUser.objects.create_user(
-                username="patient2", email="patient2@example.com", password="testpass123"
-            ),
-            rating=10,
-            comment="Invalid rating",
-        )
-        with self.assertRaises(Exception):
-            review.full_clean()
 
 
 class DoctorFormTest(TestCase):
