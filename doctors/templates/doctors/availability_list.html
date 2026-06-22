@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}DocBook - My Availability{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="section__container">
+    <div class="section__header">
+      <h1 class="section__title">My Availability</h1>
+      <p class="section__subtitle">Manage your weekly availability for patient appointments</p>
+    </div>
+
+    {% if availability_slots %}
+      <div class="availability-list" style="display:flex;flex-direction:column;gap:12px">
+        {% for slot in availability_slots %}
+          <div class="detail-card" style="display:flex;align-items:center;justify-content:space-between;padding:16px 24px">
+            <div>
+              <strong style="font-size:1rem">{{ slot.get_day_display }}</strong>
+              <span style="color:var(--color-text-secondary);margin-left:12px">
+                {{ slot.start_time|time:"g:i A" }} — {{ slot.end_time|time:"g:i A" }}
+              </span>
+              {% if not slot.is_available %}
+                <span class="badge badge--cancelled" style="margin-left:8px">Unavailable</span>
+              {% endif %}
+            </div>
+            <a href="{% url 'doctors:availability_delete' slot.pk %}" class="btn btn--outline btn--sm" style="color:var(--color-danger)">Remove</a>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-state__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <h2 class="empty-state__title">No availability set</h2>
+        <p class="empty-state__text">Add your available time slots so patients can book appointments with you.</p>
+        <a href="{% url 'doctors:availability_create' %}" class="btn btn--primary">Add Availability</a>
+      </div>
+    {% endif %}
+
+    <div class="section__actions">
+      <a href="{% url 'doctors:availability_create' %}" class="btn btn--primary">Add Time Slot</a>
+      <a href="{% url 'doctors:doctor_detail' user_doctor_profile.pk %}" class="btn btn--outline">Back to Profile</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

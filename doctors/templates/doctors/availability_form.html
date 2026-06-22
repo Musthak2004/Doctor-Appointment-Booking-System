@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}DocBook - Add Availability{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="section__container">
+    <div class="section__header">
+      <h1 class="section__title">Add Availability</h1>
+      <p class="section__subtitle">Set a weekly time slot when you're available for appointments</p>
+    </div>
+
+    <form method="post" class="form" novalidate>
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="form__non-field-errors" role="alert">
+          {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% for field in form %}
+        <div class="form__group">
+          <label for="{{ field.id_for_label }}" class="form__label">
+            {{ field.label }}
+            {% if field.field.required %}<span class="form__required">*</span>{% endif %}
+          </label>
+          {{ field }}
+          {% if field.errors %}
+            {% for error in field.errors %}
+              <p class="form__error" role="alert">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
+          {% if field.help_text %}
+            <p class="form__help">{{ field.help_text }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <div class="form__actions">
+        <button type="submit" class="btn btn--primary">Save</button>
+        <a href="{% url 'doctors:availability_list' %}" class="btn btn--outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

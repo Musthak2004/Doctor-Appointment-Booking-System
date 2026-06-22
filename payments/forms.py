@@ -8,17 +8,9 @@ class PaymentForm(forms.ModelForm):
     class Meta:
         model = Payment
         fields = (
-            "appointment",
-            "amount",
             "payment_method",
         )
         widgets = {
-            "appointment": forms.Select(
-                attrs={"class": "form__input form__select"}
-            ),
-            "amount": forms.NumberInput(
-                attrs={"step": "0.01", "min": "0", "class": "form__input"}
-            ),
             "payment_method": forms.Select(
                 attrs={"class": "form__input form__select"}
             ),

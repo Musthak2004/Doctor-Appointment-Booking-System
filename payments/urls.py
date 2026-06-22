@@ -4,6 +4,7 @@ from .views import (
     PaymentCreateView,
     PaymentDetailView,
     PaymentListView,
+    DoctorPaymentListView,
 )
 
 app_name = "payments"
@@ -14,6 +15,12 @@ urlpatterns = [
         "",
         PaymentListView.as_view(),
         name="payment_list"
+    ),
+
+    path(
+        "doctor/",
+        DoctorPaymentListView.as_view(),
+        name="doctor_payment_list"
     ),
 
     path(

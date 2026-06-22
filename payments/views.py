@@ -1,3 +1,4 @@
+from django.db import models
 from django.views.generic import (
     CreateView,
     DetailView,
@@ -109,3 +110,30 @@ class PaymentListView(
         ).select_related(
             "appointment__doctor__user"
         )
+
+
+class DoctorPaymentListView(
+    LoginRequiredMixin,
+    ListView
+):
+
+    model = Payment
+
+    template_name = (
+        "payments/payment_list.html"
+    )
+
+    context_object_name = "payments"
+
+    def get_queryset(self):
+        return Payment.objects.filter(
+            models.Q(appointment__patient=self.request.user) |
+            models.Q(appointment__doctor__user=self.request.user)
+        ).select_related(
+            "appointment__doctor__user"
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_doctor_view"] = True
+        return context

@@ -1,10 +1,10 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 
-from .models import Doctor
-from .forms import DoctorForm
+from .models import Doctor, DoctorAvailability
+from .forms import DoctorForm, AvailabilityForm
 
 
 class DoctorListView(ListView):
@@ -78,3 +78,58 @@ class DoctorUpdateView(LoginRequiredMixin, UpdateView):
             return redirect("doctors:doctor_create")
         self.object = obj
         return super().post(request, *args, **kwargs)
+
+
+class AvailabilityListView(LoginRequiredMixin, ListView):
+
+    model = DoctorAvailability
+    template_name = "doctors/availability_list.html"
+    context_object_name = "availability_slots"
+
+    def get_queryset(self):
+        try:
+            doctor = self.request.user.doctor_profile
+            return DoctorAvailability.objects.filter(doctor=doctor)
+        except Doctor.DoesNotExist:
+            return DoctorAvailability.objects.none()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context["doctor"] = self.request.user.doctor_profile
+        except Doctor.DoesNotExist:
+            context["doctor"] = None
+        return context
+
+
+class AvailabilityCreateView(LoginRequiredMixin, CreateView):
+
+    model = DoctorAvailability
+    form_class = AvailabilityForm
+    template_name = "doctors/availability_form.html"
+    success_url = reverse_lazy("doctors:availability_list")
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            request.user.doctor_profile
+        except Doctor.DoesNotExist:
+            return redirect("doctors:doctor_create")
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.doctor = self.request.user.doctor_profile
+        return super().form_valid(form)
+
+
+class AvailabilityDeleteView(LoginRequiredMixin, DeleteView):
+
+    model = DoctorAvailability
+    template_name = "doctors/availability_confirm_delete.html"
+    success_url = reverse_lazy("doctors:availability_list")
+
+    def get_queryset(self):
+        try:
+            doctor = self.request.user.doctor_profile
+            return DoctorAvailability.objects.filter(doctor=doctor)
+        except Doctor.DoesNotExist:
+            return DoctorAvailability.objects.none()

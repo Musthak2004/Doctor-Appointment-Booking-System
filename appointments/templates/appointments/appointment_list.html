@@ -60,6 +60,8 @@
     <div class="section__actions">
       {% if is_doctor_view %}
         <a href="{% url 'doctors:doctor_detail' user_doctor_profile.pk %}" class="btn btn--outline">My Profile</a>
+        <a href="{% url 'prescriptions:doctor_prescription_list' %}" class="btn btn--outline">Prescriptions</a>
+        <a href="{% url 'payments:doctor_payment_list' %}" class="btn btn--outline">Payments</a>
       {% else %}
         <a href="{% url 'appointments:appointment_create' %}" class="btn btn--primary">Book New Appointment</a>
         <a href="{% url 'payments:payment_list' %}" class="btn btn--outline">Payments</a>

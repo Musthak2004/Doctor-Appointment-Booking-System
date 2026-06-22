@@ -4,6 +4,7 @@ from .views import (
     PrescriptionCreateView,
     PrescriptionDetailView,
     PrescriptionListView,
+    DoctorPrescriptionListView,
 )
 
 app_name = "prescriptions"
@@ -14,6 +15,12 @@ urlpatterns = [
         "",
         PrescriptionListView.as_view(),
         name="prescription_list"
+    ),
+
+    path(
+        "doctor/",
+        DoctorPrescriptionListView.as_view(),
+        name="doctor_prescription_list"
     ),
 
     path(

@@ -1,3 +1,4 @@
+from django.db import models
 from django.views.generic import (
     CreateView,
     DetailView,
@@ -82,7 +83,8 @@ class PrescriptionDetailView(
 
     def get_queryset(self):
         return Prescription.objects.filter(
-            appointment__patient=self.request.user
+            models.Q(appointment__patient=self.request.user) |
+            models.Q(appointment__doctor__user=self.request.user)
         ).select_related(
             "appointment__doctor__user",
             "appointment"
@@ -114,3 +116,33 @@ class PrescriptionListView(
         ).prefetch_related(
             "items"
         )
+
+
+class DoctorPrescriptionListView(
+    LoginRequiredMixin,
+    ListView
+):
+
+    model = Prescription
+
+    template_name = (
+        "prescriptions/prescription_list.html"
+    )
+
+    context_object_name = (
+        "prescriptions"
+    )
+
+    def get_queryset(self):
+        return Prescription.objects.filter(
+            appointment__doctor__user=self.request.user
+        ).select_related(
+            "appointment__patient",
+        ).prefetch_related(
+            "items"
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_doctor_view"] = True
+        return context
