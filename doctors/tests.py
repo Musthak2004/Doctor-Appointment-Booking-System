@@ -324,3 +324,151 @@ class DoctorUpdateViewTest(TestCase):
         self.doctor.refresh_from_db()
         self.assertEqual(self.doctor.consultation_fee, 250.00)
         self.assertEqual(self.doctor.bio, "Updated bio.")
+
+
+class AvailabilityListViewTest(TestCase):
+    def setUp(self):
+        self.user = CustomUser.objects.create_user(
+            username="availist", email="availist@example.com", password="testpass123",
+            user_type="DOCTOR",
+        )
+        self.doctor = Doctor.objects.create(
+            user=self.user, license_number="MED-AVLIST", consultation_fee=100,
+        )
+        self.slot = DoctorAvailability.objects.create(
+            doctor=self.doctor, day="mon", start_time="09:00", end_time="17:00",
+        )
+
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(reverse("doctors:availability_list"))
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={reverse('doctors:availability_list')}",
+        )
+
+    def test_redirect_to_create_if_no_profile(self):
+        user2 = CustomUser.objects.create_user(
+            username="noavail", email="noavail@example.com", password="testpass123",
+            user_type="DOCTOR",
+        )
+        self.client.login(email="noavail@example.com", password="testpass123")
+        response = self.client.get(reverse("doctors:availability_list"))
+        self.assertRedirects(response, reverse("doctors:doctor_create"))
+
+    def test_list_shows_availability(self):
+        self.client.login(email="availist@example.com", password="testpass123")
+        response = self.client.get(reverse("doctors:availability_list"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Monday")
+        self.assertTemplateUsed(response, "doctors/availability_list.html")
+
+
+class AvailabilityCreateViewTest(TestCase):
+    def setUp(self):
+        self.user = CustomUser.objects.create_user(
+            username="availcreate", email="availcreate@example.com",
+            password="testpass123", user_type="DOCTOR",
+        )
+        self.doctor = Doctor.objects.create(
+            user=self.user, license_number="MED-AVCR", consultation_fee=100,
+        )
+
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(reverse("doctors:availability_create"))
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={reverse('doctors:availability_create')}",
+        )
+
+    def test_redirect_to_create_if_no_profile(self):
+        user2 = CustomUser.objects.create_user(
+            username="noavail2", email="noavail2@example.com", password="testpass123",
+            user_type="DOCTOR",
+        )
+        self.client.login(email="noavail2@example.com", password="testpass123")
+        response = self.client.get(reverse("doctors:availability_create"))
+        self.assertRedirects(response, reverse("doctors:doctor_create"))
+
+    def test_create_availability(self):
+        self.client.login(email="availcreate@example.com", password="testpass123")
+        response = self.client.post(reverse("doctors:availability_create"), {
+            "day": "tue",
+            "start_time": "10:00",
+            "end_time": "16:00",
+            "is_available": True,
+        })
+        self.assertRedirects(response, reverse("doctors:availability_list"))
+        self.assertTrue(
+            DoctorAvailability.objects.filter(doctor=self.doctor, day="tue").exists()
+        )
+
+    def test_form_invalid_renders_form(self):
+        self.client.login(email="availcreate@example.com", password="testpass123")
+        response = self.client.post(reverse("doctors:availability_create"), {
+            "day": "mon",
+            "start_time": "17:00",
+            "end_time": "09:00",
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "doctors/availability_form.html")
+
+
+class AvailabilityDeleteViewTest(TestCase):
+    def setUp(self):
+        self.user = CustomUser.objects.create_user(
+            username="availdel", email="availdel@example.com", password="testpass123",
+            user_type="DOCTOR",
+        )
+        self.doctor = Doctor.objects.create(
+            user=self.user, license_number="MED-AVDEL", consultation_fee=100,
+        )
+        self.slot = DoctorAvailability.objects.create(
+            doctor=self.doctor, day="wed", start_time="09:00", end_time="17:00",
+        )
+
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(
+            reverse("doctors:availability_delete", args=[self.slot.pk])
+        )
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={reverse('doctors:availability_delete', args=[self.slot.pk])}",
+        )
+
+    def test_redirect_to_create_if_no_profile(self):
+        user2 = CustomUser.objects.create_user(
+            username="noavail3", email="noavail3@example.com", password="testpass123",
+            user_type="DOCTOR",
+        )
+        self.client.login(email="noavail3@example.com", password="testpass123")
+        response = self.client.get(
+            reverse("doctors:availability_delete", args=[self.slot.pk])
+        )
+        self.assertRedirects(response, reverse("doctors:doctor_create"))
+
+    def test_delete_availability(self):
+        self.client.login(email="availdel@example.com", password="testpass123")
+        response = self.client.post(
+            reverse("doctors:availability_delete", args=[self.slot.pk])
+        )
+        self.assertRedirects(response, reverse("doctors:availability_list"))
+        self.assertFalse(
+            DoctorAvailability.objects.filter(pk=self.slot.pk).exists()
+        )
+
+    def test_cannot_delete_other_doctors_slot(self):
+        other_user = CustomUser.objects.create_user(
+            username="otheravail", email="otheravail@example.com",
+            password="testpass123", user_type="DOCTOR",
+        )
+        other_doctor = Doctor.objects.create(
+            user=other_user, license_number="MED-OTHER", consultation_fee=100,
+        )
+        other_slot = DoctorAvailability.objects.create(
+            doctor=other_doctor, day="thu", start_time="09:00", end_time="17:00",
+        )
+        self.client.login(email="availdel@example.com", password="testpass123")
+        response = self.client.get(
+            reverse("doctors:availability_delete", args=[other_slot.pk])
+        )
+        self.assertEqual(response.status_code, 404)

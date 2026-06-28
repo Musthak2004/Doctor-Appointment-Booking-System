@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from .models import CustomUser
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomUserUpdateForm
 
 
 class CustomUserModelTest(TestCase):
@@ -126,3 +126,17 @@ class SignUpViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse("login"))
         self.assertTrue(CustomUser.objects.filter(email="signup@example.com").exists())
+
+
+class CustomUserUpdateFormTest(TestCase):
+    def test_valid_form(self):
+        form = CustomUserUpdateForm(data={
+            "username": "updateduser",
+            "email": "updated@example.com",
+            "phone_number": "9876543210",
+        })
+        self.assertTrue(form.is_valid())
+
+    def test_password_field_excluded(self):
+        form = CustomUserUpdateForm()
+        self.assertNotIn("password", form.fields)

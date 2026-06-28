@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 from django.contrib.auth import get_user_model
 
 from doctors.models import Doctor, Specialization
@@ -160,3 +161,105 @@ class ReviewFormTest(TestCase):
             form.fields["rating"].widget.attrs.get("class"),
             "form__input form__select",
         )
+
+
+class ReviewListViewTest(TestCase):
+    def setUp(self):
+        self.patient = CustomUser.objects.create_user(
+            username="revlist", email="revlist@test.com", password="testpass123",
+        )
+        doctor_user = CustomUser.objects.create_user(
+            username="revlistdr", email="revlistdr@test.com",
+            password="testpass123", user_type="DOCTOR",
+        )
+        self.doctor = Doctor.objects.create(
+            user=doctor_user, license_number="MED-REVLIST", consultation_fee=100,
+        )
+        self.appointment = Appointment.objects.create(
+            patient=self.patient, doctor=self.doctor,
+            appointment_date="2026-08-01", appointment_time="10:00",
+        )
+        self.review = Review.objects.create(
+            patient=self.patient, doctor=self.doctor,
+            appointment=self.appointment, rating=4, comment="Good",
+        )
+
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(reverse("reviews:review_list"))
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={reverse('reviews:review_list')}",
+        )
+
+    def test_list_shows_patient_reviews(self):
+        self.client.login(email="revlist@test.com", password="testpass123")
+        response = self.client.get(reverse("reviews:review_list"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Good")
+        self.assertTemplateUsed(response, "reviews/review_list.html")
+
+    def test_list_only_shows_own_reviews(self):
+        other = CustomUser.objects.create_user(
+            username="revlist2", email="revlist2@test.com", password="testpass123",
+        )
+        other_appt = Appointment.objects.create(
+            patient=other, doctor=self.doctor,
+            appointment_date="2026-08-10", appointment_time="10:00",
+        )
+        Review.objects.create(
+            patient=other, doctor=self.doctor,
+            appointment=other_appt, rating=3, comment="Other",
+        )
+        self.client.login(email="revlist@test.com", password="testpass123")
+        response = self.client.get(reverse("reviews:review_list"))
+        self.assertEqual(len(response.context["reviews"]), 1)
+
+
+class ReviewDetailViewTest(TestCase):
+    def setUp(self):
+        self.patient = CustomUser.objects.create_user(
+            username="revdet", email="revdet@test.com", password="testpass123",
+        )
+        doctor_user = CustomUser.objects.create_user(
+            username="revdetdr", email="revdetdr@test.com",
+            password="testpass123", user_type="DOCTOR",
+        )
+        doctor = Doctor.objects.create(
+            user=doctor_user, license_number="MED-REVDET", consultation_fee=100,
+        )
+        appointment = Appointment.objects.create(
+            patient=self.patient, doctor=doctor,
+            appointment_date="2026-09-01", appointment_time="10:00",
+        )
+        self.review = Review.objects.create(
+            patient=self.patient, doctor=doctor,
+            appointment=appointment, rating=5, comment="Excellent",
+        )
+
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(
+            reverse("reviews:review_detail", args=[self.review.pk])
+        )
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={reverse('reviews:review_detail', args=[self.review.pk])}",
+        )
+
+    def test_shows_review_detail(self):
+        self.client.login(email="revdet@test.com", password="testpass123")
+        response = self.client.get(
+            reverse("reviews:review_detail", args=[self.review.pk])
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Excellent")
+        self.assertTemplateUsed(response, "reviews/review_detail.html")
+
+    def test_404_for_other_patient(self):
+        other = CustomUser.objects.create_user(
+            username="revdet2", email="revdet2@test.com", password="testpass123",
+        )
+        self.client.login(email="revdet2@test.com", password="testpass123")
+        response = self.client.get(
+            reverse("reviews:review_detail", args=[self.review.pk])
+        )
+        self.assertEqual(response.status_code, 404)
