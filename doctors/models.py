@@ -3,14 +3,18 @@ from accounts.models import CustomUser
 
 
 class Specialization(models.Model):
-
     name = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name = "Specialization"
+        verbose_name_plural = "Specializations"
 
     def __str__(self):
         return self.name
-    
-class Doctor(models.Model):
 
+
+class Doctor(models.Model):
     user = models.OneToOneField(
         CustomUser,
         on_delete=models.CASCADE,
@@ -70,11 +74,16 @@ class Doctor(models.Model):
         auto_now=True
     )
 
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Doctor"
+        verbose_name_plural = "Doctors"
+
     def __str__(self):
         return self.user.username
 
-class DoctorAvailability(models.Model):
 
+class DoctorAvailability(models.Model):
     DAYS = (
         ("mon", "Monday"),
         ("tue", "Tuesday"),
@@ -108,9 +117,11 @@ class DoctorAvailability(models.Model):
         auto_now=True
     )
 
-    def __str__(self):
-        return f"{self.doctor.user.username} - {self.day}"
-
     class Meta:
         unique_together = ("doctor", "day", "start_time")
+        ordering = ["doctor", "day", "start_time"]
+        verbose_name = "Doctor Availability"
+        verbose_name_plural = "Doctor Availabilities"
 
+    def __str__(self):
+        return f"{self.doctor.user.username} - {self.day}"

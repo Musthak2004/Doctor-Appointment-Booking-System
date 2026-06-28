@@ -3,7 +3,6 @@ from accounts.models import CustomUser
 
 
 class Patient(models.Model):
-
     user = models.OneToOneField(
         CustomUser,
         on_delete=models.CASCADE,
@@ -46,6 +45,15 @@ class Patient(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True
     )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Patient"
+        verbose_name_plural = "Patients"
 
     def __str__(self):
         return self.user.username

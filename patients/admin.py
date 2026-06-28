@@ -4,7 +4,6 @@ from .models import Patient
 
 @admin.register(Patient)
 class PatientAdmin(admin.ModelAdmin):
-
     list_display = (
         "id",
         "user",
@@ -13,6 +12,8 @@ class PatientAdmin(admin.ModelAdmin):
         "emergency_contact",
         "created_at",
     )
+
+    list_select_related = ("user",)
 
     search_fields = (
         "user__username",
@@ -24,5 +25,7 @@ class PatientAdmin(admin.ModelAdmin):
         "gender",
         "blood_group",
     )
+
+    readonly_fields = ("created_at", "updated_at")
 
     ordering = ("-created_at",)

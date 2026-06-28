@@ -6,6 +6,7 @@ from .models import Doctor, Specialization, DoctorAvailability
 class SpecializationAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
     search_fields = ("name",)
+    ordering = ("name",)
 
 
 @admin.register(Doctor)
@@ -34,6 +35,10 @@ class DoctorAdmin(admin.ModelAdmin):
         "license_number",
     )
 
+    readonly_fields = ("created_at", "updated_at")
+
+    ordering = ("-created_at",)
+
 
 @admin.register(DoctorAvailability)
 class AvailabilityAdmin(admin.ModelAdmin):
@@ -50,4 +55,3 @@ class AvailabilityAdmin(admin.ModelAdmin):
     list_filter = ("day",)
 
     list_select_related = ("doctor__user",)
-

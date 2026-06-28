@@ -3,12 +3,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 
+from accounts.mixins import UserTypeRequiredMixin, ProfileExistsMixin, ProfileGetObjectMixin
 from .models import Doctor, DoctorAvailability
 from .forms import DoctorForm, AvailabilityForm
 
 
 class DoctorListView(ListView):
-
     model = Doctor
     template_name = "doctors/doctor_list.html"
     context_object_name = "doctors"
@@ -19,7 +19,6 @@ class DoctorListView(ListView):
 
 
 class DoctorDetailView(DetailView):
-
     model = Doctor
     template_name = "doctors/doctor_detail.html"
     context_object_name = "doctor"
@@ -32,8 +31,8 @@ class DoctorDetailView(DetailView):
         )
 
 
-class DoctorCreateView(LoginRequiredMixin, CreateView):
-
+class DoctorCreateView(UserTypeRequiredMixin, CreateView):
+    required_user_type = "DOCTOR"
     model = Doctor
     form_class = DoctorForm
     template_name = "doctors/doctor_form.html"
@@ -42,7 +41,7 @@ class DoctorCreateView(LoginRequiredMixin, CreateView):
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return self.handle_no_permission()
-        if request.user.user_type != "DOCTOR":
+        if request.user.user_type != self.required_user_type:
             return redirect("home")
         try:
             request.user.doctor_profile
@@ -55,28 +54,18 @@ class DoctorCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class DoctorUpdateView(LoginRequiredMixin, UpdateView):
-
+class DoctorUpdateView(ProfileGetObjectMixin, UpdateView):
+    profile_attr = "doctor_profile"
+    redirect_to = "doctors:doctor_create"
     model = Doctor
     form_class = DoctorForm
     template_name = "doctors/doctor_form.html"
     success_url = reverse_lazy("doctors:doctor_list")
 
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return self.handle_no_permission()
-        try:
-            self.object = self.request.user.doctor_profile
-        except Doctor.DoesNotExist:
-            return redirect("doctors:doctor_create")
-        return super().dispatch(request, *args, **kwargs)
 
-    def get_object(self, queryset=None):
-        return self.object
-
-
-class AvailabilityListView(LoginRequiredMixin, ListView):
-
+class AvailabilityListView(ProfileExistsMixin, ListView):
+    profile_attr = "doctor_profile"
+    redirect_to = "doctors:doctor_create"
     model = DoctorAvailability
     template_name = "doctors/availability_list.html"
     context_object_name = "availability_slots"
@@ -97,27 +86,22 @@ class AvailabilityListView(LoginRequiredMixin, ListView):
         return context
 
 
-class AvailabilityCreateView(LoginRequiredMixin, CreateView):
-
+class AvailabilityCreateView(ProfileExistsMixin, CreateView):
+    profile_attr = "doctor_profile"
+    redirect_to = "doctors:doctor_create"
     model = DoctorAvailability
     form_class = AvailabilityForm
     template_name = "doctors/availability_form.html"
     success_url = reverse_lazy("doctors:availability_list")
-
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            request.user.doctor_profile
-        except Doctor.DoesNotExist:
-            return redirect("doctors:doctor_create")
-        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         form.instance.doctor = self.request.user.doctor_profile
         return super().form_valid(form)
 
 
-class AvailabilityDeleteView(LoginRequiredMixin, DeleteView):
-
+class AvailabilityDeleteView(ProfileExistsMixin, DeleteView):
+    profile_attr = "doctor_profile"
+    redirect_to = "doctors:doctor_create"
     model = DoctorAvailability
     template_name = "doctors/availability_confirm_delete.html"
     success_url = reverse_lazy("doctors:availability_list")
