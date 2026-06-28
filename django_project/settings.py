@@ -11,9 +11,20 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev-key-change-in-pro
 
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-if DEBUG and SECRET_KEY == 'django-insecure-dev-key-change-in-production':
+_insecure_keys = ['django-insecure-dev-key-change-in-production', 'your-secret-key-here']
+if SECRET_KEY in _insecure_keys:
     import warnings
-    warnings.warn("Using insecure default SECRET_KEY. Set SECRET_KEY in your .env file for production.", stacklevel=2)
+    if DEBUG:
+        warnings.warn(
+            f"Using placeholder SECRET_KEY ({SECRET_KEY}). "
+            "Generate a real key with: python -c \"from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())\"",
+            stacklevel=2,
+        )
+    else:
+        raise RuntimeError(
+            f"SECRET_KEY is set to an insecure placeholder '{SECRET_KEY}'. "
+            "Generate a real key for production."
+        )
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
