@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}DocBook - Contact Us{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="section__container">
+    <div class="section__header">
+      <h1 class="section__title">Contact Us</h1>
+      <p class="section__subtitle">We'd love to hear from you. Get in touch with our team.</p>
+    </div>
+
+    <div class="profile__body" style="max-width:720px;margin:0 auto">
+      <div class="profile__section">
+        <h2 class="profile__section-title">Get in Touch</h2>
+        <div class="profile__grid">
+          <div>
+            <span class="profile__field-label">Email</span>
+            <span class="profile__field-value">support@docbook.com</span>
+          </div>
+          <div>
+            <span class="profile__field-label">Phone</span>
+            <span class="profile__field-value">+1 (555) 123-4567</span>
+          </div>
+          <div>
+            <span class="profile__field-label">Address</span>
+            <span class="profile__field-value">123 Health Street, Medical City</span>
+          </div>
+          <div>
+            <span class="profile__field-label">Hours</span>
+            <span class="profile__field-value">Mon - Fri, 9:00 AM - 6:00 PM</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile__section">
+        <h2 class="profile__section-title">Send Us a Message</h2>
+        <form method="post" class="form" novalidate>
+          {% csrf_token %}
+          <div class="form__group">
+            <label class="form__label" for="name">Your Name</label>
+            <input type="text" id="name" name="name" class="form__input" placeholder="John Doe" required>
+          </div>
+          <div class="form__group">
+            <label class="form__label" for="email">Your Email</label>
+            <input type="email" id="email" name="email" class="form__input" placeholder="you@example.com" required>
+          </div>
+          <div class="form__group">
+            <label class="form__label" for="message">Message</label>
+            <textarea id="message" name="message" rows="5" class="form__input" placeholder="How can we help you?" required></textarea>
+          </div>
+          <div class="form__actions">
+            <button type="submit" class="btn btn--primary btn--submit">Send Message</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -33,6 +33,7 @@
             <nav id="primary-nav" class="header__nav" aria-label="Main navigation">
                 <a href="{% url 'home' %}" class="header__nav-link" {% if request.path == '/' %}aria-current="page"{% endif %}>Home</a>
                 <a href="{% url 'doctors:doctor_list' %}" class="header__nav-link" {% if request.path == '/doctors/' %}aria-current="page"{% endif %}>Find Doctors</a>
+                <a href="{% url 'contact' %}" class="header__nav-link" {% if request.path == '/contact/' %}aria-current="page"{% endif %}>Contact</a>
 
                 <div class="header__nav-actions">
                     {% if user.is_authenticated %}
@@ -93,6 +94,7 @@
                     <div class="footer__links">
                         <a href="{% url 'home' %}" class="footer__link">Home</a>
                         <a href="{% url 'doctors:doctor_list' %}" class="footer__link">Find Doctors</a>
+                        <a href="{% url 'contact' %}" class="footer__link">Contact</a>
 
                     </div>
                 </div>
