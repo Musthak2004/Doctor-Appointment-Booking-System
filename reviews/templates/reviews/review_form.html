@@ -10,7 +10,7 @@
       <p class="section__subtitle">Share your experience with Dr. {{ appointment.doctor.user.get_full_name|default:appointment.doctor.user.username }}</p>
     </div>
 
-    <div class="detail-card">
+    <div class="detail-card reveal">
       <div class="detail-card__body">
         <div class="detail-row">
           <span class="detail-row__label">Doctor</span>
@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <form method="post" class="form" style="margin-top:24px">
+    <form method="post" class="form reveal reveal-d1" style="margin-top:24px">
       {% csrf_token %}
 
       {% if form.non_field_errors %}

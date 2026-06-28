@@ -13,7 +13,7 @@
     {% if reviews %}
       <div class="appointment-list">
         {% for review in reviews %}
-          <article class="appointment-card">
+          <article class="appointment-card reveal{% cycle ' reveal-d1' ' reveal-d2' ' reveal-d3' %}">
             <div class="appointment-card__body">
               <h3 class="appointment-card__doctor">
                 Dr. {{ review.doctor.user.get_full_name|default:review.doctor.user.username }}

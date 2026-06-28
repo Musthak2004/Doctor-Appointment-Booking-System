@@ -23,7 +23,7 @@
     </div>
 
     <div class="profile__body">
-        <div class="profile__section">
+        <div class="profile__section reveal reveal-d1">
             <h2 class="profile__section-title">About</h2>
             <div class="profile__grid profile__grid--single">
                 <div>
@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <div class="profile__section">
+        <div class="profile__section reveal reveal-d2">
             <h2 class="profile__section-title">Professional Details</h2>
             <div class="profile__grid">
                 <div>
@@ -71,7 +71,7 @@
 
         {% with availability=doctor.availability.all %}
             {% if availability %}
-                <div class="profile__section">
+                <div class="profile__section reveal reveal-d3">
                     <h2 class="profile__section-title">Availability</h2>
                     <div class="profile__grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">
                         {% for slot in availability %}
@@ -92,7 +92,7 @@
 
         {% with reviews=doctor.reviews.all %}
             {% if reviews %}
-                <div class="profile__section">
+                <div class="profile__section reveal reveal-d4">
                     <h2 class="profile__section-title">Patient Reviews</h2>
                     <div class="profile__grid profile__grid--single" style="display:flex;flex-direction:column;gap:12px">
                         {% for review in reviews %}

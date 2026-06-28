@@ -6,12 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="DocBook - Book doctor appointments online anytime, anywhere. Find verified healthcare professionals near you.">
     <meta name="theme-color" content="#0f6bff">
+    <meta name="author" content="DocBook">
+    <meta name="keywords" content="doctor appointment, healthcare, booking, medical, online appointment">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f6bff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 2h6v7h7v6h-7v7H9v-7H2V9h7z'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230f6bff'%3E%3Cpath d='M9 2h6v7h7v6h-7v7H9v-7H2V9h7z'/%3E%3C/svg%3E">
     <title>{% block title %}DocBook - Doctor Appointment Booking{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% block extra_head %}{% endblock %}
+    {% block extra_css %}{% endblock %}
+    <style>
+html{scroll-behavior:smooth}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px);max-height:0}to{opacity:1;transform:translateY(0);max-height:60px}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-d1{transition-delay:.1s}.reveal-d2{transition-delay:.2s}.reveal-d3{transition-delay:.3s}.reveal-d4{transition-delay:.4s}
+.section,.profile,.auth{animation:fadeIn .5s ease-out}
+.form__error,.form__non-field-errors{animation:slideDown .3s ease-out}
+.detail-card,.appointment-card,.doctor-card,.feature-card,.step{transition:transform .3s ease,box-shadow .3s ease}
+.detail-card:hover,.appointment-card:hover,.doctor-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.btn--loading{pointer-events:none;opacity:.8}
+.auth__card{animation:fadeInUp .5s ease-out}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.section,.profile,.auth,.auth__card,.form__error,.form__non-field-errors{animation:none}.detail-card,.appointment-card,.doctor-card,.feature-card,.step{transition:none}html{scroll-behavior:auto}}
+    </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -120,6 +142,10 @@
         </div>
     </footer>
 
+    <script>
+document.addEventListener('DOMContentLoaded',function(){var r=document.querySelectorAll('.reveal');if(r.length&&'IntersectionObserver'in window){var o=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');o.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});r.forEach(function(e){o.observe(e)})}else{r.forEach(function(e){e.classList.add('visible')})}
+document.querySelectorAll('[data-loading-text]').forEach(function(b){b.addEventListener('click',function(){if(this.form&&this.form.checkValidity()){this.textContent=this.dataset.loadingText;this.classList.add('btn--loading')}})})});
+    </script>
     <script src="{% static 'js/app.js' %}" defer></script>
     {% block extra_scripts %}{% endblock %}
 </body>

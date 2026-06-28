@@ -13,7 +13,7 @@
     {% if payments %}
       <div class="payment-list">
         {% for payment in payments %}
-          <article class="payment-card">
+          <article class="payment-card reveal{% cycle ' reveal-d1' ' reveal-d2' ' reveal-d3' %}">
             <div class="payment-card__body">
               <h3 class="payment-card__title">
                 Dr. {{ payment.appointment.doctor.user.get_full_name|default:payment.appointment.doctor.user.email }}

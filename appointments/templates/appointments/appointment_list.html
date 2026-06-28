@@ -13,7 +13,7 @@
     {% if appointments %}
       <div class="appointment-list">
         {% for appointment in appointments %}
-          <article class="appointment-card">
+          <article class="appointment-card reveal{% cycle ' reveal-d1' ' reveal-d2' ' reveal-d3' %}">
             <div class="appointment-card__body">
               <h3 class="appointment-card__doctor">
                 {% if is_doctor_view %}

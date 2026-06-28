@@ -13,7 +13,7 @@
     {% if prescriptions %}
       <div class="prescription-list">
         {% for prescription in prescriptions %}
-          <article class="prescription-card">
+          <article class="prescription-card reveal{% cycle ' reveal-d1' ' reveal-d2' ' reveal-d3' %}">
             <div class="prescription-card__body">
               <h3 class="prescription-card__title">
                 Dr. {{ prescription.appointment.doctor.user.get_full_name|default:prescription.appointment.doctor.user.email }}

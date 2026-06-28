@@ -19,7 +19,7 @@
 {% if doctors %}
     <div class="doctor-grid">
         {% for doctor in doctors %}
-            <a href="{% url 'doctors:doctor_detail' doctor.pk %}" class="doctor-card">
+            <a href="{% url 'doctors:doctor_detail' doctor.pk %}" class="doctor-card reveal{% cycle ' reveal-d1' ' reveal-d2' ' reveal-d3' ' reveal-d4' %}">
                 <div class="doctor-card__avatar" aria-hidden="true">
                     {% if doctor.profile_picture %}
                         <img src="{{ doctor.profile_picture.url }}" alt="{{ doctor.user.get_full_name|default:doctor.user.username }}" class="doctor-card__img">

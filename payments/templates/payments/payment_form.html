@@ -10,7 +10,7 @@
       <p class="section__subtitle">Complete your payment to confirm the appointment</p>
     </div>
 
-    <div class="detail-card">
+    <div class="detail-card reveal">
       <div class="detail-card__body">
         <div class="detail-row">
           <span class="detail-row__label">Doctor</span>
@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <form method="post" class="form" novalidate>
+    <form method="post" class="form reveal reveal-d1" novalidate>
       {% csrf_token %}
 
       {% if form.non_field_errors %}

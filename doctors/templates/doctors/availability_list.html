@@ -14,7 +14,7 @@
     {% if availability_slots %}
       <div class="availability-list" style="display:flex;flex-direction:column;gap:12px">
         {% for slot in availability_slots %}
-          <div class="detail-card" style="display:flex;align-items:center;justify-content:space-between;padding:16px 24px">
+          <div class="detail-card reveal{% cycle ' reveal-d1' ' reveal-d2' ' reveal-d3' %}" style="display:flex;align-items:center;justify-content:space-between;padding:16px 24px">
             <div>
               <strong style="font-size:1rem">{{ slot.get_day_display }}</strong>
               <span style="color:var(--color-text-secondary);margin-left:12px">
