@@ -14,13 +14,14 @@ class Patient(models.Model):
         blank=True
     )
 
+    class Gender(models.TextChoices):
+        MALE = "male", "Male"
+        FEMALE = "female", "Female"
+        OTHER = "other", "Other"
+
     gender = models.CharField(
         max_length=10,
-        choices=(
-            ("male", "Male"),
-            ("female", "Female"),
-            ("other", "Other"),
-        ),
+        choices=Gender.choices,
         blank=True
     )
 

@@ -1,6 +1,5 @@
-import datetime
-
 from django import forms
+from django.utils import timezone
 
 from doctors.models import Doctor, DoctorAvailability
 from .models import Appointment
@@ -12,7 +11,7 @@ WEEKDAY_MAP = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 class AppointmentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop("user", None)
+        kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
         self.fields["doctor"].queryset = (
             Doctor.objects.filter(is_verified=True)
@@ -53,7 +52,7 @@ class AppointmentForm(forms.ModelForm):
 
     def clean_appointment_date(self):
         date = self.cleaned_data["appointment_date"]
-        if date < datetime.date.today():
+        if date < timezone.localdate():
             raise forms.ValidationError("Appointment date cannot be in the past.")
         return date
 
@@ -66,7 +65,7 @@ class AppointmentForm(forms.ModelForm):
         if not (date and time and doctor):
             return cleaned_data
 
-        if date == datetime.date.today() and time < datetime.datetime.now().time():
+        if date == timezone.localdate() and time < timezone.now().time():
             raise forms.ValidationError(
                 "Appointment time cannot be in the past for today's date."
             )

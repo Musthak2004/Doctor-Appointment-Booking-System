@@ -126,13 +126,6 @@ class PaymentCreateViewTest(TestCase):
             reverse("payments:payment_detail", args=[existing.pk]),
         )
 
-    def test_get_initial_has_amount(self):
-        self.client.login(email="paycreate@test.com", password="testpass123")
-        response = self.client.get(
-            reverse("payments:payment_create", args=[self.appointment.pk])
-        )
-        self.assertEqual(response.context["form"].initial.get("amount"), 150.00)
-
     def test_404_for_other_patient(self):
         other = CustomUser.objects.create_user(
             username="otherpay", email="otherpay@test.com", password="testpass123",

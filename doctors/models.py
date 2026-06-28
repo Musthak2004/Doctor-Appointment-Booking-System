@@ -84,15 +84,14 @@ class Doctor(models.Model):
 
 
 class DoctorAvailability(models.Model):
-    DAYS = (
-        ("mon", "Monday"),
-        ("tue", "Tuesday"),
-        ("wed", "Wednesday"),
-        ("thu", "Thursday"),
-        ("fri", "Friday"),
-        ("sat", "Saturday"),
-        ("sun", "Sunday"),
-    )
+    class Day(models.TextChoices):
+        MONDAY = "mon", "Monday"
+        TUESDAY = "tue", "Tuesday"
+        WEDNESDAY = "wed", "Wednesday"
+        THURSDAY = "thu", "Thursday"
+        FRIDAY = "fri", "Friday"
+        SATURDAY = "sat", "Saturday"
+        SUNDAY = "sun", "Sunday"
 
     doctor = models.ForeignKey(
         Doctor,
@@ -102,7 +101,7 @@ class DoctorAvailability(models.Model):
 
     day = models.CharField(
         max_length=10,
-        choices=DAYS
+        choices=Day.choices
     )
 
     start_time = models.TimeField()
@@ -122,6 +121,11 @@ class DoctorAvailability(models.Model):
         ordering = ["doctor", "day", "start_time"]
         verbose_name = "Doctor Availability"
         verbose_name_plural = "Doctor Availabilities"
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.start_time and self.end_time and self.start_time >= self.end_time:
+            raise ValidationError("End time must be after start time.")
 
     def __str__(self):
         return f"{self.doctor.user.username} - {self.day}"

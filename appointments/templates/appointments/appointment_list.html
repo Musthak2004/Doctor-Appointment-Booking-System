@@ -57,6 +57,8 @@
       </div>
     {% endif %}
 
+    {% include "_pagination.html" %}
+
     <div class="section__actions">
       {% if is_doctor_view %}
         <a href="{% url 'doctors:doctor_detail' user_doctor_profile.pk %}" class="btn btn--outline">My Profile</a>

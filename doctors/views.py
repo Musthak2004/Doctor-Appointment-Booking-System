@@ -1,5 +1,4 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 
@@ -39,14 +38,10 @@ class DoctorCreateView(UserTypeRequiredMixin, CreateView):
     success_url = reverse_lazy("doctors:doctor_list")
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return self.handle_no_permission()
-        if request.user.user_type != self.required_user_type:
-            return redirect("home")
         try:
             request.user.doctor_profile
             return redirect("doctors:doctor_detail", pk=request.user.doctor_profile.pk)
-        except Doctor.DoesNotExist:
+        except (Doctor.DoesNotExist, AttributeError):
             return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):

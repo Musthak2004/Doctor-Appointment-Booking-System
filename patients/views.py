@@ -15,14 +15,10 @@ class PatientCreateView(UserTypeRequiredMixin, CreateView):
     success_url = reverse_lazy("patients:patient_detail")
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return self.handle_no_permission()
-        if request.user.user_type != self.required_user_type:
-            return redirect("home")
         try:
             request.user.patient_profile
             return redirect("patients:patient_detail")
-        except Patient.DoesNotExist:
+        except (Patient.DoesNotExist, AttributeError):
             return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):

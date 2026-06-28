@@ -1,0 +1,21 @@
+{% if page_obj.paginator.num_pages > 1 %}
+<nav class="pagination" aria-label="Page navigation" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:32px;flex-wrap:wrap">
+  {% if page_obj.has_previous %}
+    <a href="?page=1" class="btn btn--outline btn--sm" aria-label="First page">&laquo; First</a>
+    <a href="?page={{ page_obj.previous_page_number }}" class="btn btn--outline btn--sm" aria-label="Previous page">&lsaquo; Prev</a>
+  {% endif %}
+
+  {% for num in page_obj.paginator.page_range %}
+    {% if page_obj.number == num %}
+      <span class="btn btn--primary btn--sm" style="cursor:default" aria-current="page">{{ num }}</span>
+    {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+      <a href="?page={{ num }}" class="btn btn--outline btn--sm" aria-label="Page {{ num }}">{{ num }}</a>
+    {% endif %}
+  {% endfor %}
+
+  {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" class="btn btn--outline btn--sm" aria-label="Next page">Next &rsaquo;</a>
+    <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn--outline btn--sm" aria-label="Last page">Last &raquo;</a>
+  {% endif %}
+</nav>
+{% endif %}

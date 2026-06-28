@@ -7,13 +7,12 @@ from appointments.models import Appointment
 
 class Review(models.Model):
 
-    RATING_CHOICES = (
-        (1, "1 Star"),
-        (2, "2 Stars"),
-        (3, "3 Stars"),
-        (4, "4 Stars"),
-        (5, "5 Stars"),
-    )
+    class Rating(models.IntegerChoices):
+        ONE = 1, "1 Star"
+        TWO = 2, "2 Stars"
+        THREE = 3, "3 Stars"
+        FOUR = 4, "4 Stars"
+        FIVE = 5, "5 Stars"
 
     patient = models.ForeignKey(
         CustomUser,
@@ -37,7 +36,7 @@ class Review(models.Model):
     )
 
     rating = models.PositiveSmallIntegerField(
-        choices=RATING_CHOICES,
+        choices=Rating.choices,
     )
 
     comment = models.TextField(

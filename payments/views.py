@@ -55,11 +55,6 @@ class PaymentCreateView(
             )
         return super().dispatch(request, *args, **kwargs)
 
-    def get_initial(self):
-        return {
-            "amount": self.appointment.doctor.consultation_fee,
-        }
-
     def form_valid(self, form):
         form.instance.appointment = self.appointment
         form.instance.amount = self.appointment.doctor.consultation_fee

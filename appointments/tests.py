@@ -3,6 +3,7 @@ import datetime
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 from doctors.models import Doctor, Specialization, DoctorAvailability
 from .models import Appointment
@@ -81,7 +82,6 @@ class AppointmentFormTest(TestCase):
     def test_valid_form(self):
         date = self.future_monday
         form = AppointmentForm(
-            user=self.patient,
             data={
                 "doctor": self.doctor.pk,
                 "appointment_date": date.isoformat(),
@@ -92,9 +92,8 @@ class AppointmentFormTest(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_past_date_invalid(self):
-        past = datetime.date.today() - datetime.timedelta(days=1)
+        past = timezone.localdate() - datetime.timedelta(days=1)
         form = AppointmentForm(
-            user=self.patient,
             data={
                 "doctor": self.doctor.pk,
                 "appointment_date": past.isoformat(),
@@ -107,7 +106,6 @@ class AppointmentFormTest(TestCase):
     def test_doctor_not_available_invalid(self):
         wednesday = self._next_weekday(2)
         form = AppointmentForm(
-            user=self.patient,
             data={
                 "doctor": self.doctor.pk,
                 "appointment_date": wednesday.isoformat(),
@@ -118,14 +116,14 @@ class AppointmentFormTest(TestCase):
         self.assertIn("not available", str(form.errors))
 
     def test_missing_fields_invalid(self):
-        form = AppointmentForm(user=self.patient, data={})
+        form = AppointmentForm(data={})
         self.assertFalse(form.is_valid())
         self.assertIn("doctor", form.errors)
         self.assertIn("appointment_date", form.errors)
         self.assertIn("appointment_time", form.errors)
 
     def test_form_fields(self):
-        form = AppointmentForm(user=self.patient)
+        form = AppointmentForm()
         expected = {"doctor", "appointment_date", "appointment_time", "reason"}
         self.assertEqual(set(form.fields), expected)
 

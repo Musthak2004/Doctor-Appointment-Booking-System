@@ -33,7 +33,8 @@ class Prescription(models.Model):
         verbose_name_plural = "Prescriptions"
 
     def __str__(self):
-        return f"Rx #{self.id} - {self.appointment.doctor.user.get_full_name()}"
+        doctor_name = self.appointment.doctor.user.get_full_name() or self.appointment.doctor.user.username
+        return f"Rx #{self.id} - Dr. {doctor_name}"
 
 
 class PrescriptionItem(models.Model):

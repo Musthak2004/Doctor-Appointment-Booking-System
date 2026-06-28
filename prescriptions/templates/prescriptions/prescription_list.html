@@ -44,6 +44,8 @@
       </div>
     {% endif %}
 
+    {% include "_pagination.html" %}
+
     <div class="section__actions">
       <a href="{% url 'appointments:appointment_list' %}" class="btn btn--outline">My Appointments</a>
       <a href="{% url 'reviews:review_list' %}" class="btn btn--outline">My Reviews</a>
