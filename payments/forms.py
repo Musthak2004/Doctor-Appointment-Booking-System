@@ -19,8 +19,4 @@ class PaymentForm(forms.ModelForm):
             "payment_method": "Payment Method",
         }
 
-    def clean_amount(self):
-        amount = self.cleaned_data["amount"]
-        if amount <= 0:
-            raise forms.ValidationError("Amount must be greater than zero.")
-        return amount
+

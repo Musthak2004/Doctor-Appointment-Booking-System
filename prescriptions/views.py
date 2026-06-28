@@ -108,6 +108,8 @@ class PrescriptionListView(
         "prescriptions"
     )
 
+    paginate_by = 20
+
     def get_queryset(self):
         return Prescription.objects.filter(
             appointment__patient=self.request.user
@@ -132,6 +134,8 @@ class DoctorPrescriptionListView(
     context_object_name = (
         "prescriptions"
     )
+
+    paginate_by = 20
 
     def get_queryset(self):
         return Prescription.objects.filter(

@@ -235,6 +235,7 @@ class DoctorCreateViewTest(TestCase):
             username="newdr",
             email="newdr@example.com",
             password="testpass123",
+            user_type="DOCTOR",
         )
         self.spec = Specialization.objects.create(name="Pediatrics")
 
@@ -286,6 +287,7 @@ class DoctorUpdateViewTest(TestCase):
             username="updatedr",
             email="update@example.com",
             password="testpass123",
+            user_type="DOCTOR",
         )
         self.doctor = Doctor.objects.create(
             user=self.user,
@@ -303,7 +305,8 @@ class DoctorUpdateViewTest(TestCase):
 
     def test_redirect_to_create_if_no_profile(self):
         user2 = CustomUser.objects.create_user(
-            username="nodr", email="nodr@example.com", password="testpass123"
+            username="nodr", email="nodr@example.com", password="testpass123",
+            user_type="DOCTOR",
         )
         self.client.login(email="nodr@example.com", password="testpass123")
         response = self.client.get(reverse("doctors:doctor_update"))

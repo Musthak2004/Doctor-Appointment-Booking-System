@@ -15,6 +15,7 @@ class ReviewListView(LoginRequiredMixin, ListView):
     model = Review
     template_name = "reviews/review_list.html"
     context_object_name = "reviews"
+    paginate_by = 20
 
     def get_queryset(self):
         return Review.objects.filter(
@@ -46,9 +47,6 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
                 })
             )
         return super().dispatch(request, *args, **kwargs)
-
-    def get_initial(self):
-        return {}
 
     def form_valid(self, form):
         form.instance.patient = self.request.user

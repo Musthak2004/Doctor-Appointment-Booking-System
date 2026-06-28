@@ -20,7 +20,9 @@ class PatientCreateView(LoginRequiredMixin, CreateView):
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return super().dispatch(request, *args, **kwargs)
+            return self.handle_no_permission()
+        if request.user.user_type != "PATIENT":
+            return redirect("home")
         try:
             request.user.patient_profile
             return redirect("patients:patient_detail")
@@ -35,22 +37,17 @@ class PatientUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "patients/patient_form.html"
     success_url = reverse_lazy("patients:patient_detail")
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+        try:
+            self.object = self.request.user.patient_profile
+        except Patient.DoesNotExist:
+            return redirect("patients:patient_create")
+        return super().dispatch(request, *args, **kwargs)
+
     def get_object(self, queryset=None):
-        return self.request.user.patient_profile
-
-    def get(self, request, *args, **kwargs):
-        try:
-            self.object = self.get_object()
-        except Patient.DoesNotExist:
-            return redirect("patients:patient_create")
-        return super().get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        try:
-            self.object = self.get_object()
-        except Patient.DoesNotExist:
-            return redirect("patients:patient_create")
-        return super().post(request, *args, **kwargs)
+        return self.object
 
 
 class PatientDetailView(LoginRequiredMixin, DetailView):
@@ -58,12 +55,14 @@ class PatientDetailView(LoginRequiredMixin, DetailView):
     model = Patient
     template_name = "patients/patient_detail.html"
 
-    def get_object(self, queryset=None):
-        return self.request.user.patient_profile
-
-    def get(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
         try:
-            self.object = self.get_object()
+            self.object = self.request.user.patient_profile
         except Patient.DoesNotExist:
             return redirect("patients:patient_create")
-        return super().get(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        return self.object

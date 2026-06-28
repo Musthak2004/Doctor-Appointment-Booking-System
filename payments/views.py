@@ -1,4 +1,3 @@
-from django.db import models
 from django.views.generic import (
     CreateView,
     DetailView,
@@ -103,6 +102,7 @@ class PaymentListView(
     )
 
     context_object_name = "payments"
+    paginate_by = 20
 
     def get_queryset(self):
         return Payment.objects.filter(
@@ -124,11 +124,11 @@ class DoctorPaymentListView(
     )
 
     context_object_name = "payments"
+    paginate_by = 20
 
     def get_queryset(self):
         return Payment.objects.filter(
-            models.Q(appointment__patient=self.request.user) |
-            models.Q(appointment__doctor__user=self.request.user)
+            appointment__doctor__user=self.request.user
         ).select_related(
             "appointment__doctor__user"
         )

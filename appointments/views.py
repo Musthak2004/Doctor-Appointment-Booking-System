@@ -44,6 +44,10 @@ class AppointmentCreateView(
         kwargs["user"] = self.request.user
         return kwargs
 
+    def form_valid(self, form):
+        form.instance.patient = self.request.user
+        return super().form_valid(form)
+
 class AppointmentListView(
     LoginRequiredMixin,
     ListView
@@ -58,6 +62,8 @@ class AppointmentListView(
     context_object_name = (
         "appointments"
     )
+
+    paginate_by = 20
 
     def get_queryset(self):
 
@@ -83,6 +89,8 @@ class DoctorAppointmentListView(
     context_object_name = (
         "appointments"
     )
+
+    paginate_by = 20
 
     def get_queryset(self):
         return Appointment.objects.filter(

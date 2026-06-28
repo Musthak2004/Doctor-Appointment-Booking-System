@@ -11,6 +11,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev-key-change-in-pro
 
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
+if DEBUG and SECRET_KEY == 'django-insecure-dev-key-change-in-production':
+    import warnings
+    warnings.warn("Using insecure default SECRET_KEY. Set SECRET_KEY in your .env file for production.", stacklevel=2)
+
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
 
@@ -130,6 +134,7 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+    SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     STORAGES = {

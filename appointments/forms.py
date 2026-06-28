@@ -14,8 +14,6 @@ class AppointmentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
-        if self.user:
-            self.instance.patient = self.user
         self.fields["doctor"].queryset = (
             Doctor.objects.filter(is_verified=True)
             .select_related("user")
