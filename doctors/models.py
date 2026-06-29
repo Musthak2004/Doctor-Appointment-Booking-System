@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from accounts.models import CustomUser
 
@@ -123,7 +124,6 @@ class DoctorAvailability(models.Model):
         verbose_name_plural = "Doctor Availabilities"
 
     def clean(self):
-        from django.core.exceptions import ValidationError
         if self.start_time and self.end_time and self.start_time >= self.end_time:
             raise ValidationError("End time must be after start time.")
 

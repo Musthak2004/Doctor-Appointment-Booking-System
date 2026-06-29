@@ -32,6 +32,8 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
     template_name = "reviews/review_form.html"
 
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
         self.appointment = get_object_or_404(
             Appointment.objects.select_related("doctor__user"),
             pk=self.kwargs["appointment_id"],

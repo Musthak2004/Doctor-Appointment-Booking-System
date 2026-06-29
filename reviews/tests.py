@@ -263,3 +263,89 @@ class ReviewDetailViewTest(TestCase):
             reverse("reviews:review_detail", args=[self.review.pk])
         )
         self.assertEqual(response.status_code, 404)
+
+
+class ReviewCreateViewTest(TestCase):
+    def setUp(self):
+        self.patient = CustomUser.objects.create_user(
+            username="revcreate", email="revcreate@test.com",
+            password="testpass123",
+        )
+        doctor_user = CustomUser.objects.create_user(
+            username="revcreatedr", email="revcreatedr@test.com",
+            password="testpass123", user_type="DOCTOR",
+        )
+        self.doctor = Doctor.objects.create(
+            user=doctor_user, license_number="MED-REVCREATE",
+            consultation_fee=100,
+        )
+        self.appointment = Appointment.objects.create(
+            patient=self.patient, doctor=self.doctor,
+            appointment_date="2026-10-01", appointment_time="10:00",
+        )
+        self.url = reverse(
+            "reviews:review_create",
+            kwargs={"appointment_id": self.appointment.pk},
+        )
+
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
+
+    def test_logged_in_patient_can_access(self):
+        self.client.login(email="revcreate@test.com", password="testpass123")
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "reviews/review_form.html")
+
+    def test_creates_review_successfully(self):
+        self.client.login(email="revcreate@test.com", password="testpass123")
+        response = self.client.post(self.url, data={
+            "rating": 4,
+            "comment": "Great doctor!",
+        })
+        self.assertEqual(Review.objects.count(), 1)
+        review = Review.objects.first()
+        self.assertEqual(review.patient, self.patient)
+        self.assertEqual(review.doctor, self.doctor)
+        self.assertEqual(review.appointment, self.appointment)
+        self.assertRedirects(
+            response,
+            reverse("reviews:review_detail", args=[review.pk]),
+        )
+
+    def test_duplicate_review_redirects(self):
+        Review.objects.create(
+            patient=self.patient, doctor=self.doctor,
+            appointment=self.appointment, rating=5, comment="First",
+        )
+        self.client.login(email="revcreate@test.com", password="testpass123")
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            reverse(
+                "reviews:review_detail",
+                kwargs={"pk": self.appointment.review.pk},
+            ),
+        )
+
+    def test_nonexistent_appointment_returns_404(self):
+        self.client.login(email="revcreate@test.com", password="testpass123")
+        bad_url = reverse(
+            "reviews:review_create",
+            kwargs={"appointment_id": 99999},
+        )
+        response = self.client.get(bad_url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_wrong_patient_cannot_review(self):
+        other = CustomUser.objects.create_user(
+            username="revcreate2", email="revcreate2@test.com",
+            password="testpass123",
+        )
+        self.client.login(email="revcreate2@test.com", password="testpass123")
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 404)
